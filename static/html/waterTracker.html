@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker</title>
+    <link rel="stylesheet" href="/static/css/waterTracker.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="/static/js/waterTracker.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+        </ul>
+    </nav>
+
+    <div id="flexbox1">
+        <div id="box1">
+            <div id="box1-1">
+                <div id="fillerDiv"></div>
+                <div id="box1-1-1">
+                    Water Tracker
+                </div>
+                <div id="waterTrackerButton">
+                    <a href="mealTracker.html">
+                        <button id="mealTrackerButton">Go Back to Meal Tracker</button>
+                    </a>
+                </div>
+            </div>
+            <div id="box1-2">
+                <div id="box1-2-1">
+                    <label for="waterAmountInput">Amount (mL):</label>
+                    <input type="text" id="waterAmountInput" placeholder="Enter amount in mL">
+
+                    <label for="waterDateInput">Date & Time:</label>
+                    <input type="datetime-local" id="waterDateInput">
+
+                    <button onclick="logWater()">Log Water</button>
+                </div>
+
+
+                <div id="titles">
+                    <div id="titleAmount">
+                        Amount (mL)
+                    </div>
+                    <div id="titleDateAndTime">
+                        Date & Time
+                    </div>
+
+                </div>
+            </div>
+            <div id="box1-3">
+                <ul id="trackedWaterList"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

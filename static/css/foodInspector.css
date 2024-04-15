@@ -1,0 +1,179 @@
+body {
+    background-color: #FFFFFF;
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #DEF6D8;
+    border-bottom: 1px solid #ccc; 
+    padding: 10px; 
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    height: 70px;
+    align-items: center;
+}
+
+.navbar ul li {
+    margin-right: 30px;
+    margin-left: 30px
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+}
+
+#logo {
+    color: #91c789;
+    font-size: 25px;
+    margin-right: 50px;
+}
+#flexbox1{
+    display: flex;
+    justify-content:center;
+    align-content:center;
+    height: 100vh;
+}
+
+#box1 {
+    display: flex;
+    margin-top: 4%;
+    margin-left: 8%;
+    margin-right: 8%;
+    margin-bottom: 3%;
+    background-color: white;
+    border-style: solid;
+    border-color: #99D9DE; 
+    border-width: 2px;
+    border-radius: 15px; 
+    flex: 1;
+    flex-direction: column;
+}
+
+#box1-1 {
+    display: flex;
+    justify-content:center;
+    align-items: flex-end;
+    height: 80px;
+    font-size: 25px;
+    font-weight:bold;
+}
+
+#box1-2 {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+#box1-2 > * {
+    margin: 0 5px; 
+}
+
+#foodLookup {
+    width: 200px;
+    height: 20px;
+    padding: 8px;
+    font-size: 12px;
+    border: 1px solid #91c789;
+    border-radius:12px;
+    background-color: #F2FFF5;
+}
+
+#search {
+    font-size:15px;
+    color: #FFFFFF;
+    background-color: #91c789;
+    padding: 9px 12px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+}
+
+#box1-3{
+    display:flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+#box1-3-1{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 3%;
+    background-color: #F2FFF5;
+    border-style: solid;
+    border-color: #DEF6D8; 
+    border-width: 2px;
+    border-radius: 15px; 
+    flex-direction: column;
+}
+
+#nutritionList{
+    list-style-type:none;
+}
+
+#infobox{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    height: 120px;
+    background-color: #F2FFF5;
+    border-style: solid;
+    border-color: #DEF6D8; 
+    border-width: 2px;
+    border-radius: 15px; 
+    justify-content: space-between;
+}
+
+#foodNameandID{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top:20px;
+}
+#taxonomyAndFoodGroup{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    margin-left:20px;
+    margin-right:20px;
+    margin-bottom:20px;
+}
+
+#loading-foodinspector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #loading-foodinspector img {
+    width: 150px; 
+    height: 150px; 
+  }
+
+
+
+  

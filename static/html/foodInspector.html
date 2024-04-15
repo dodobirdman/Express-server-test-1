@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- spinner gif by loading.io --> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/foodInspector.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="/static/js/foodInspector.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+        </ul>
+    </nav>
+    <div id="loading-foodinspector">
+        <img src="loading.gif" alt="loading">
+    </div>
+
+    <div id="flexbox1">
+        <div id="box1">
+            <div id="box1-1">
+                Food Inspector
+            </div>
+
+            <div id="box1-2">
+                <label for="foodLookup">Food Lookup: </label>
+                <input type="text" id="foodLookup" name="foodLookup" placeholder="e.g Onion">
+                <button id="search">Search</button>
+
+            </div>
+
+            <div id="box1-3">
+                <div id="infobox">
+                    <div id="foodNameandID">
+                        <div id="foodName">
+
+                        </div>
+                        <div id="foodID">
+
+                        </div>
+                    </div>
+                    <div id="taxonomyAndFoodGroup">
+                        <div id="taxonomy">
+
+                        </div>
+                        <div id="foodGroup">
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <div id="box1-3-1">
+
+                    <ul id="nutritionList">
+                    </ul>
+                </div>
+            </div>
+
+
+
+        </div>
+</body>
+
+</html>

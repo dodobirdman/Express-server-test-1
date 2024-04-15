@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Tracker</title>
+    <link rel="stylesheet" href="/static/css/mealTracker.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="/static/js/mealTracker.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+        </ul>
+    </nav>
+
+    <div id="flexbox1">
+        <div id="box1">
+            <div id="box1-1">
+                <div id="fillerDiv"></div>
+                <div id="box1-1-1">
+                    Meal Tracker
+                </div>
+                <div id="waterTrackerButton">
+                    <a href="waterTracker.html">
+                    <button>Go to Water Tracker</button>
+                </a>
+                </div> 
+            </div>
+
+            <div id="box1-2">
+                <label for="mealDropdown">Select Meal:</label>
+                <select id="mealDropdown"></select>
+
+                <label for="gramsInput">Grams Eaten:</label>
+                <input type="text" id="gramsInput" placeholder="Enter grams">
+
+                <label for="dateInput">Date & Time:</label>
+                <input type="datetime-local" id="dateInput">
+
+                <button onclick="logMeal()">Log Meal</button>
+
+                
+            </div>
+            <div id="box1-3">
+                <div id="titles">
+                    <div id = "titleName">
+                        Name
+                    </div>
+                    <div id = "titleGrams">
+                        Grams
+                    </div>
+                    <div id = "titleKcal">
+                        Calories (kCal)
+                    </div>
+                    <div id = "titleProtein">
+                        Protein
+                    </div>
+                    <div id = "titleFat">
+                        Fat
+                    </div>
+                    <div id = "titleFiber">
+                        Fiber
+                    </div>
+                    <div id = "titleDate">
+                        Date & Time
+                    </div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <ul id="trackedMealsList"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

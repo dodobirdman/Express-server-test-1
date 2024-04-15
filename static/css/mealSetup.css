@@ -1,0 +1,179 @@
+body {
+    background-color: #FFFFFF;
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #DEF6D8;
+    border-bottom: 1px solid #ccc; 
+    padding: 10px; 
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    height: 70px;
+    align-items: center;
+}
+
+.navbar ul li {
+    margin-right: 30px;
+    margin-left: 30px
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #000;
+}
+
+#logo {
+    color: #91c789;
+    font-size: 25px;
+    margin-right: 50px;
+}
+
+#flexbox1{
+    display: flex;
+    justify-content:center;
+    align-content:center;
+    height: 100vh;
+}
+
+#box1 {
+    display: flex;
+    margin-top: 4%;
+    margin-left: 8%;
+    margin-right: 8%;
+    margin-bottom: 3%;
+    background-color: white;
+    border-style: solid;
+    border-color: #99D9DE; 
+    border-width: 2px;
+    border-radius: 15px; 
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+#box1-1 {
+    display: flex;
+    flex-direction: column;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 15px;
+    text-align: center;
+    align-items: center;
+}
+
+#mealInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+}
+
+#box1-1-1{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#box1-1-1 input {
+    width: 300px; 
+    height: 20px;
+    padding: 8px;
+    border-radius: 12px; 
+    margin-bottom: 10px; 
+}
+
+#mealName{
+    background-color: #F2FFF5; 
+    border: 2px solid #91c789;
+}
+
+#ingredient{
+    background-color: #F2FFF5;
+    border: 2px solid #569BD5;
+}
+
+#quantity {
+    background-color: #F2FFF5;
+    border: 2px solid #569BD5;
+}
+
+
+#addIngredientButton {
+    color: black;
+    background-color: #569BD5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size:15px;
+    box-shadow: none;
+    margin-bottom: 15px;
+}
+
+#addIngredientButton:hover {
+    background-color: #99D9DE;
+    color: #333;
+}
+
+#createMealBtn {
+    color: black;
+    background-color: #91c789;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size:15px;
+}
+
+#createMealBtn:hover {
+    background-color: #DEF6D8;
+    color: #333;
+}
+
+#loading-foodinspector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); 
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #loading-foodinspector img {
+    width: 150px; 
+    height: 150px; 
+  }
+
+#ingredientList {
+    list-style-type: decimal;
+}
+
+#ingredientList li {
+    background-color: #DEF6D8;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border-color: #91C789;
+    position: relative;
+    border: 2px solid #91c789;
+    padding: 5px 30px;
+}
