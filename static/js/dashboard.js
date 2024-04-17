@@ -14,13 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Bruger .filter igen til at finde vand drukket i dag
     const waterToday = trackedWater.filter(
-        (water) => water.dateAndTime.split("T")[0] === today    
-
-
+        (water) => water.dateAndTime.split("T")[0] === today
     );
 
-
-    //awidjawiuueiahawojdoawdawoiupawieawepiao
     // Finder længden af mealsToday og opdaterer div'en mealsTodayNum med hvor mange måltider blev spist i dag
     const mealsTodayNum = mealsToday.length;
     document.getElementById("mealsTodayNum").innerText = mealsTodayNum;
