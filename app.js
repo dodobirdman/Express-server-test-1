@@ -3,6 +3,7 @@ const path = require('path');
 const logger = require('morgan');
 const fs = require('fs');
 const app = express();
+const sql = require('mssql');
 const PORT = 3000;
 
 // Log requests
@@ -69,3 +70,54 @@ app.post('/signup', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+
+// Server-side code (Node.js environment)
+
+
+// Configuration for your Azure SQL Database
+const config = {
+    user: 'martin',
+    password: 'NutriTracker!23',
+    server: 'eksamenserver.database.windows.net',
+    database: 'nutrieksamen',
+    options: {
+        encrypt: true, // Use encryption
+        trustServerCertificate: false // Change to true for local development
+    }
+};
+
+async function fetchData() {
+    try {
+        // Connect to the database
+        await sql.connect(config);
+
+        // Fetch data from the table
+        const result = await sql.query`SELECT Meals FROM Test3`;
+
+        // Close the connection
+        await sql.close();
+
+        return result.recordset; // Return the fetched data
+
+    } catch (err) {
+        // Handle errors
+        console.error('Error:', err);
+        throw err; // Re-throw the error to be caught where fetchData is called
+    }
+}
+
+app.get('/meals', async (req, res) => {
+    try {
+        const createdMeals = await fetchData(); // Fetch meals data
+        res.json(createdMeals); // Send the fetched data as JSON response
+    } catch (err) {
+        // Handle errors
+        console.error('Error fetching data:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+module.exports = { fetchData };
