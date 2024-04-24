@@ -179,6 +179,7 @@ function updateIngredientList() {
     hideLoadingOverlay();
 }
 
+
 // Funktion der opretter et måltid
 function createMeal() {
     // Alert hvis der er ingen ingredienser
@@ -186,9 +187,16 @@ function createMeal() {
         alert("Please add at least one ingredient.");
         return;
     }
-    // Gemmer måltiden i localStorage
-    const jsonContent = JSON.stringify(mealData);
-    localStorage.setItem(mealData.name, jsonContent);
+
+    // Henter eksisterende måltider fra localStorage eller opretter en tom liste
+    let createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
+
+    // Tilføjer det aktuelle måltid til listen af måltider
+    createdMeals.push(mealData);
+    console.log(mealData);
+
+    // Gemmer listen af måltider tilbage i localStorage
+    localStorage.setItem('createdMeals', JSON.stringify(createdMeals));
 
     // Nulstiller mealData og ingredienslisten
     mealData = { name: "", ingredients: [] };
@@ -199,3 +207,4 @@ function createMeal() {
     // Sender brugeren tilbage til Meal Creator
     window.location.href = "mealCreator.html"
 }
+
