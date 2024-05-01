@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Set cookie upon successful login
                 document.cookie = `username=${username}; path=/`; // Set cookie with username
-                
 
                 // Redirect the user to another page (e.g., dashboard) after successful login
                 window.location.href = '/static/html/dashboard.html';
