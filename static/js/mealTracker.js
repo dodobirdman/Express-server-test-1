@@ -29,31 +29,86 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Save the fetched data to localStorage
         // Modify this part based on the structure of the fetched data and how you want to store it in localStorage
         Object.entries(responseData).forEach(([key, value]) => {
-            localStorage.setItem(key, JSON.stringify(value));
+            localStorage.setItem(key, value);
         });
 
         console.log('Data fetched and saved to localStorage successfully.');
 
         // Continue with the rest of your code here...
 
-        // Henter måltiderne fra localStorage
-        const savedMeals = Object.keys(localStorage)
-            .filter(key => key !== 'trackedMeals' && key !== 'trackedWater') // Ekskluderer trackedMeals og trackedWater
-            .map(key => JSON.parse(localStorage.getItem(key)));
 
-        // Sætter måltiderne ind i dropdown menuen
-        const mealDropdown = document.getElementById('mealDropdown');
-        savedMeals.forEach(meal => {
-            const option = document.createElement('option');
-            option.value = meal.name;
-            option.text = meal.name;
-            mealDropdown.appendChild(option);
-        });
+
+    // Retrieve meals from the createdMeals object
+    const createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
+
+    // Populate the dropdown menu with meals from createdMeals
+    const mealDropdown = document.getElementById('mealDropdown');
+    createdMeals.forEach(meal => {
+        const option = document.createElement('option');
+        option.value = meal.name;
+        option.text = meal.name;
+        mealDropdown.appendChild(option);
+    });
+
 
         // Henter de tidligere tracked meals fra localStorage når siden loader
         const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
         const trackedMealsList = document.getElementById('trackedMealsList');
 
+        // Funktion til at vise tracked måltider
+    function renderTrackedMeal(trackedMeal) {
+        const tableRow = document.createElement('li');
+        tableRow.classList.add('tracked-meal-row');
+
+        // Laver en fast bredde til navnet på måltidet
+        const nameColumnWidth = '80px';
+
+        // Laver en array med de egenskaber der skal vises
+        const properties = ['name', 'gramsEaten', 'totalNutrition.calories', 'totalNutrition.protein', 'totalNutrition.fat', 'totalNutrition.fiber', 'dateEaten'];
+
+        // Laver en div for hver egenskab og sætter den til den rigtige bredde
+        properties.forEach((property, index) => {
+            const cell = document.createElement('div');
+            const value = property.split('.').reduce((obj, key) => obj[key], trackedMeal);
+
+            // Sætter en fast decimalplads på talværdierne
+            if (typeof value === 'number') {
+                cell.textContent = value.toFixed(1);
+            } else {
+                cell.textContent = value;
+
+                // Sætter en fast bredde på cellen
+                if (index === 0) {
+                    cell.style.width = nameColumnWidth;
+                }
+            }
+            // Sætter cellen ind i tabelrækken
+            tableRow.appendChild(cell);
+        });
+
+        // Laver en knap til at redigere måltidet
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'editButton';
+        editButton.onclick = function () {
+            editMeal(trackedMeal.id);
+        };
+        // Laver en knap til at slette måltidet
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'deleteButton';
+        deleteButton.onclick = function () {
+            deleteMeal(trackedMeal.id);
+        };
+
+        // Sætter knapperne ind i tabelrækken
+        tableRow.appendChild(editButton);
+        tableRow.appendChild(deleteButton);
+
+        // Sætter rækken ind i tabellen
+        trackedMealsList.appendChild(tableRow);
+    }
+    
         // Viser de tracked meals der er gemt i localStorage
         trackedMeals.forEach(renderTrackedMeal);
 
@@ -83,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const selectedMealName = mealDropdown.value;
             const gramsEaten = parseFloat(document.getElementById('gramsInput').value) || 0; // Sørger for at gramsEaten er et tal
             const dateEaten = document.getElementById('dateInput').value; // Tager dato og tidspunkt fra input-feltet
-            const selectedMeal = savedMeals.find(meal => meal.name === selectedMealName); // Finder det valgte måltid
+            const selectedMeal = createdMeals.find(meal => meal.name === selectedMealName); // Finder det valgte måltid
     
             // Gemmer måltidet i localStorage
             if (selectedMeal) {
