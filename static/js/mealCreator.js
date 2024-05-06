@@ -84,6 +84,37 @@ function loadMealData() {
     });
 }
 
+const brugerNavn = localStorage.getItem('Brugernavn');
+// Add this function to your client-side JavaScript file
+function saveMealsToDatabase(mealsData) {
+    
+    const meals = mealsData;
+       
+    fetch('/save-meals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save meals to the database');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Meals saved to the database:', data);
+    })
+    .catch(error => {
+        console.error('Error saving meals to the database:', error);
+    });
+}
+
+
+
+
+
 document.getElementById("box1-2").addEventListener("click", function (event) {
     const clickedElement = event.target;
     if (clickedElement.classList.contains("food-name-link")) {
@@ -100,6 +131,7 @@ function deleteMeal(mealName) {
     // Remove the meal from the createdMeals array in localStorage
     const createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
     const updatedMeals = createdMeals.filter(meal => meal.name !== mealName);
+    saveMealsToDatabase(JSON.stringify(updatedMeals));
     localStorage.setItem('createdMeals', JSON.stringify(updatedMeals));
 }
 
