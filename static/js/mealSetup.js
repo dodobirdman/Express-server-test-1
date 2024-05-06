@@ -179,6 +179,33 @@ function updateIngredientList() {
     hideLoadingOverlay();
 }
 
+const brugerNavn = localStorage.getItem('Brugernavn');
+// Add this function to your client-side JavaScript file
+function saveMealsToDatabase(mealsData) {
+    
+    const meals = mealsData;
+       
+    fetch('/save-meals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save meals to the database');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Meals saved to the database:', data);
+    })
+    .catch(error => {
+        console.error('Error saving meals to the database:', error);
+    });
+}
+
 
 // Funktion der opretter et måltid
 function createMeal() {
@@ -196,6 +223,7 @@ function createMeal() {
     console.log(mealData);
 
     // Gemmer listen af måltider tilbage i localStorage
+    saveMealsToDatabase(JSON.stringify(createdMeals));
     localStorage.setItem('createdMeals', JSON.stringify(createdMeals));
 
     // Nulstiller mealData og ingredienslisten
@@ -207,4 +235,3 @@ function createMeal() {
     // Sender brugeren tilbage til Meal Creator
     window.location.href = "mealCreator.html"
 }
-
