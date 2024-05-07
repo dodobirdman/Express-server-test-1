@@ -11,12 +11,16 @@ app.use(logger('dev'));
 app.use(express.json());
 
 // Serve HTML files from the 'static/html' directory
-app.use('/static/html', express.static(path.join(__dirname, 'static/html')));
+app.use(express.static(path.join(__dirname, 'static')));
+
+//app.use('/static/html', express.static(path.join(__dirname, 'static/html')));
 
 // Handle requests for files within the 'static' directory
 app.get('/static/*', function(req, res) {
     res.sendFile(path.join(__dirname, req.url));
 });
+
+
 
 // Endpoint to handle login requests
 app.post('/login', async (req, res) => {
@@ -153,6 +157,39 @@ const config = {
     }
 };
 
+
+// Add this endpoint to your server-side JavaScript file
+app.post('/save-meals', async (req, res) => {
+    const { meals, brugerNavn } = req.body;
+    
+    try {
+        // Connect to the database
+        await sql.connect(config);
+
+        // Update meals in the database
+        const updateMealQuery = `
+            UPDATE Brugere
+            SET createdMeals = '${meals}'
+            WHERE Brugernavn = '${brugerNavn}';
+        `;
+
+        // Convert meals array to JSON string
+       // const mealsJson = JSON.stringify(meals);
+
+        await sql.query(updateMealQuery, {
+            meals: meals, // Convert meals array to JSON string
+            brugerNavn: brugerNavn
+        });
+
+        // Close the connection
+        await sql.close();
+
+        res.json({ success: true, message: 'Meals saved to the database' });
+    } catch (error) {
+        console.error('Error saving meals to the database:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
 
 
 // Function to fetch data from SQL Server and save in localStorage
