@@ -13,8 +13,12 @@ app.use(express.json());
 // Serve HTML files from the 'static/html' directory
 app.use(express.static(path.join(__dirname, 'static')));
 
-//app.use('/static/html', express.static(path.join(__dirname, 'static/html')));
+//app.use('/static/html', express.static(path.join(__dirname, 'static/html')))
 
+//Sørger for du bliver redirected til login siden først!
+app.get('/', (req, res) => {
+    res.redirect('http://localhost:3000/static/html/login.html');
+  });
 // Handle requests for files within the 'static' directory
 app.get('/static/*', function(req, res) {
     res.sendFile(path.join(__dirname, req.url));
@@ -191,37 +195,69 @@ app.post('/save-meals', async (req, res) => {
     }
 });
 
-
-// Function to fetch data from SQL Server and save in localStorage
-async function fetchDataAndSaveToLocalStorage(brugernavn) {
+app.post('/track-meals', async (req, res) => {
+    const { meals, brugerNavn } = req.body;
+    
     try {
-      // Connect to the database
-      await sql.connect(config);
-  
-      // Query to select all values from the Brugere table based on the primary key Brugernavn
-      const result = await sql.query`SELECT * FROM Brugere`;
-      const primaryKey = brugernavn;
-      // Loop through the result and save values in localStorage
-      result.recordset.forEach(row => {
-        // Assuming Brugernavn is the primary key
-       
-        // Save other values in localStorage with unique keys
-        localStorage.setItem(`${primaryKey}_id`, row.id);
-        localStorage.setItem(`${primaryKey}_Brugernavn`, row.Brugernavn);
-        localStorage.setItem(`${primaryKey}_Password`, row.Password);
-        localStorage.setItem(`${primaryKey}_name`, row.name);
-        localStorage.setItem(`${primaryKey}_Weight`, row.Weight);
-        localStorage.setItem(`${primaryKey}_Height`, row.Height);
-        localStorage.setItem(`${primaryKey}_createdMeals`, row.createdMeals);
-        localStorage.setItem(`${primaryKey}_trackedMeals`, row.trackedMeals);
-        // Add more columns as needed
-      });
-  
-      console.log('Data saved to localStorage successfully.');
-  
-      // Close the connection
-      await sql.close();
-    } catch (err) {
-      console.error('Error:', err.message);
+        // Connect to the database
+        await sql.connect(config);
+
+        // Update meals in the database
+        const updateMealQuery = `
+            UPDATE Brugere
+            SET trackedMeals = '${meals}'
+            WHERE Brugernavn = '${brugerNavn}';
+        `;
+
+        // Convert meals array to JSON string
+       // const mealsJson = JSON.stringify(meals);
+
+        await sql.query(updateMealQuery, {
+            meals: meals, // Convert meals array to JSON string
+            brugerNavn: brugerNavn
+        });
+
+        // Close the connection
+        await sql.close();
+
+        res.json({ success: true, message: 'TrackedMeal saved to the database' });
+    } catch (error) {
+        console.error('Error saving Trackedmeal to the database:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
-  }
+});
+
+//kopi af TrackedMeals til vand
+app.post('/track-water', async (req, res) => {
+    const { meals, brugerNavn } = req.body;
+    
+    try {
+        // Connect to the database
+        await sql.connect(config);
+
+        // Update meals in the database
+        const updateMealQuery = `
+            UPDATE Brugere
+            SET trackedWater = '${meals}'
+            WHERE Brugernavn = '${brugerNavn}';
+        `;
+
+        // Convert meals array to JSON string
+       // const mealsJson = JSON.stringify(meals);
+
+        await sql.query(updateMealQuery, {
+            meals: meals, // Convert meals array to JSON string
+            brugerNavn: brugerNavn
+        });
+
+        // Close the connection
+        await sql.close();
+
+        res.json({ success: true, message: 'TrackedMeal saved to the database' });
+    } catch (error) {
+        console.error('Error saving Trackedmeal to the database:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
+
+

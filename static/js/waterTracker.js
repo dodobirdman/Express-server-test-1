@@ -52,6 +52,35 @@ document.addEventListener('DOMContentLoaded', function () {
     // Kører renderTrackedWater for hver vand-log i trackedWater, for at vise de eksisterende logs
     trackedWater.forEach(renderTrackedWater);
 
+//Funktion der gemmer gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
+const brugerNavn = localStorage.getItem('Brugernavn');
+function saveTrackedMealsToDatabase(trackedMeals) {
+    
+    const meals = trackedMeals;
+       
+    fetch('/track-meals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save Trackedmeals to the database');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('TrackedMeals saved to the database:', data);
+    })
+    .catch(error => {
+        console.error('Error saving Trackedmeals to the database:', error);
+    });
+}
+
+
+
     // Funktion til at logge vand og sætte det ind i HTML
     window.logWater = function () {
         const amount = parseFloat(document.getElementById('waterAmountInput').value) || 0;
@@ -110,3 +139,6 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
         updatedTrackedWater.forEach(renderTrackedWater);
     };
 });
+
+
+

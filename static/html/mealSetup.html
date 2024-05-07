@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- spinner gif by loading.io --> 
+<!-- spinner gif by loading.io -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +22,7 @@
             <li><a href="foodInspector.html">Food Inspector</a> </li>
             <li><a href="signup.html">Sign Up</a> </li>
             <li><a href="login.html">Log In</a> </li>
+            <li><a href="signout.html">Sign Out</a> </li>
         </ul>
     </nav>
 
@@ -38,12 +40,18 @@
                     <label for="mealName">Meal Name:</label>
                     <input type="text" id="mealName" autocomplete="off" placeholder="Enter meal name">
                     <br>
-                    <label for="ingredient">Ingredient:</label>
+                    <label for="ingredient">Ingredient Search:</label>
                     <input type="text" id="ingredient" placeholder="Enter ingredient" autocomplete="off">
+                    <button id="fillDropdownBtn" onclick="fillDropdown()">Search</button>
+                    <br>
+                    <label for="ingredient">Select Ingredient:</label>
+                    <select id="ingredientDropdown"></select>
+                    
                     <br>
                     <label for="quantity">Quantity (grams):</label>
                     <input type="number" id="quantity" placeholder="Enter quantity" autocomplete="off">
                     <button id="addIngredientButton" onclick="addIngredient()">Add Ingredient</button>
+
                 </div>
                 <ul id="ingredientList"></ul>
                 <button id="createMealBtn" onclick="createMeal()">Create Meal</button>

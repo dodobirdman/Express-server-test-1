@@ -18,46 +18,70 @@ function hideLoadingOverlay() {
     document.getElementById('loading-foodinspector').style.display = 'none';
 }
 
-// Funktion der henter foodID fra API'en
-async function getFoodID(ingredient) {
-    // Variabler til at kalde API'en
-    const apiKey = "168902";
-    const apiUrl = `https://nutrimonapi.azurewebsites.net/api/FoodItems/BySearch/${encodeURIComponent(ingredient)}`;
-    
-    // Viser loading-GIF'en
-    showLoadingOverlay();
 
-    // Prøver at hente foodID'en fra API'en
+// Function to fill the dropdown with food items
+async function fillDropdown() {
+    showLoadingOverlay();
+    const ingredient = document.getElementById("ingredient").value.trim(); // Get the ingredient from the input field
+    const apiKey = "168902";
+    // Check if the ingredient field is empty
+    if (!ingredient) {
+        alert("Please enter an ingredient.");
+        return;
+    }
+
     try {
-        const response = await fetch(apiUrl, {
+        const response = await fetch(`https://nutrimonapi.azurewebsites.net/api/FoodItems/BySearch/${encodeURIComponent(ingredient)}`, {
             method: 'GET',
             headers: {
                 'X-API-Key': apiKey,
             },
         });
-        // Laver en const med resultatet fra API'en
         const result = await response.json();
 
-        // Hvis der er et resultat, så sætter den foodID'en og foodName ind i currentFood
-        if (result.length > 0) {
-            currentFood = {
-                foodID: result[0].foodID,
-                foodName: result[0].foodName
-            };
-            return currentFood.foodID;
-            // Hvis der ikke er et resultat, så viser den en fejlbesked
-        } else {
-            hideLoadingOverlay();
-            throw new Error("No results found for the given ingredient.");
-        }
+        // Clear previous dropdown options
+        const dropdown = document.getElementById("ingredientDropdown");
+        dropdown.innerHTML = "";
+
+        // Populate dropdown with food items
+        result.forEach(item => {
+            const option = document.createElement("option");
+            option.text = item.foodName;
+            option.value = item.foodID;
+            dropdown.add(option);
+        });
     } catch (error) {
-        // Hvis der er en fejl med at hente foodID'en, så viser den en fejlbesked
-        throw new Error("Error fetching foodID. Please check console for details.");
+        console.error("Error fetching food items:", error);
+        alert("Error fetching food items. Please try again later.");
     }
+    hideLoadingOverlay();
 }
+
+// Add an event listener to the "ingredient" input field
+document.getElementById("ingredient").addEventListener("keydown", function(event) {
+    // Check if the pressed key is the Enter key
+    if (event.key === "Enter") {
+        // Prevent the default action of the Enter key (form submission)
+        event.preventDefault();
+        // Trigger the click event of the "Fill Dropdown" button
+        document.getElementById("fillDropdownBtn").click();
+    }
+});
+
+// Add an event listener to the "quantity" input field
+document.getElementById("quantity").addEventListener("keydown", function(event) {
+    // Check if the pressed key is the Enter key
+    if (event.key === "Enter") {
+        // Prevent the default action of the Enter key (form submission)
+        event.preventDefault();
+        // Trigger the click event of the "Add Ingredient" button
+        document.getElementById("addIngredientButton").click();
+    }
+});
 
 // Funktion der henter nutrition values fra API'en, med foodID'en fra getFoodID
 async function getNutritionValues(foodID, quantity) {
+    showLoadingOverlay();
     const apiKey = "168902";
     // Tager alle 4 sortKeys så man kan nemt kalde API'en flere gange
     const sortKeys = [1030, 1110, 1310, 1240];
@@ -108,53 +132,51 @@ async function getNutritionValues(foodID, quantity) {
             throw new Error(`Error fetching nutrition values for sortKey ${sortKey}. Please check console for details.`);
         }
     }
+    
+    hideLoadingOverlay();
     // Returnerer næringsværdierne
     return nutritionValues;
+    
 }
 
-// Funktion der tilføjer ingredienser til et måltid
 function addIngredient() {
     const mealName = document.getElementById("mealName").value;
-    const ingredient = document.getElementById("ingredient").value;
+    const selectedFoodID = document.getElementById("ingredientDropdown").value;
     const quantity = document.getElementById("quantity").value;
-    // Giver en alert hvis der ikke er indtastet en navn til måltidet
-    if (!mealName) {
-        alert("Please enter a meal name first.");
+
+    // Check if all fields are filled
+    if (!mealName || !selectedFoodID || !quantity) {
+        alert("Please fill all fields.");
         return;
     }
-    if (!ingredient) {
-        alert("Please enter an ingredient first.");
-        return;
-    }
-    if (!quantity) {
-        alert("Please enter a quantity first.");
-        return;
-    }
-    
-    // Opdaterer mealData med navnet på måltidet
-    mealData.name = mealName;
-    
-    // Kalder getFoodID
-    getFoodID(ingredient)
-        // Kalder getNutritionValues med foodID og mængde
-        .then(foodID => getNutritionValues(foodID, quantity))
-        // Tager næringsværdierne og sætter dem ind i mealData
+
+    // Call getNutritionValues with the selected food ID
+    getNutritionValues(selectedFoodID, quantity)
         .then(nutritionValues => {
+            // Add ingredient to mealData
+            mealData.name = mealName;
             mealData.ingredients.push({
-                foodID: currentFood.foodID,
-                foodName: currentFood.foodName,
-                quantity,
+                foodID: selectedFoodID,
+                foodName: document.getElementById("ingredientDropdown").options[document.getElementById("ingredientDropdown").selectedIndex].text,
+                quantity: quantity,
                 nutrition: nutritionValues
             });
-            // Opdaterer ingredienslisten
+
+            // Update ingredient list
             updateIngredientList();
+
+            // Clear the "Ingredient" text input box
+            document.getElementById("ingredient").value = "";
+
+            // Clear the "ingredientDropdown" dropdown list
+            document.getElementById("ingredientDropdown").innerHTML = "";
+
+            // Clear the quantity text input
+            document.getElementById("quantity").value = "";
         })
         .catch(error => {
             alert(error.message);
         });
-    // Nulstiller input felterne
-    document.getElementById("ingredient").value = "";
-    document.getElementById("quantity").value = "";
 }
 
 // Funktion der opdaterer ingredienslisten
@@ -235,3 +257,5 @@ function createMeal() {
     // Sender brugeren tilbage til Meal Creator
     window.location.href = "mealCreator.html"
 }
+
+
