@@ -84,6 +84,8 @@ body {
     margin-top: 50px;
 }
 
+
+
 #box1-1-1 {
     font-size: 25px;
     font-weight: bold;
@@ -111,6 +113,19 @@ body {
     cursor: pointer;
     font-size: 14px;
 } 
+
+#singleIngredientButton button{
+    margin-left: 10px;
+    align-self: center;
+    background-color: #569BD5; 
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+} 
+
 
 .editButton {
     margin-right: 30px;

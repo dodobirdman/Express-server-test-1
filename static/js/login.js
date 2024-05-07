@@ -1,11 +1,14 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
 
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
         try {
             const response = await fetch('/login', {
@@ -23,7 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Set cookie upon successful login
                 document.cookie = `username=${username}; path=/`; // Set cookie with username
 
-                // Redirect the user to another page (e.g., dashboard) after successful login
+                // Call the function to fetch user data
+                await fetchUserData(username);
+
+                // Redirect to the dashboard
                 window.location.href = '/static/html/dashboard.html';
             } else {
                 const errorMessage = await response.text();
@@ -35,3 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+async function fetchUserData(username) {
+    try {
+        const response = await fetch('/fetch-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data from the server');
+        }
+
+        const responseData = await response.json();
+
+        Object.entries(responseData).forEach(([key, value]) => {
+            localStorage.setItem(key, value);
+        });
+
+        console.log('Data fetched and saved to localStorage successfully.');
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+}

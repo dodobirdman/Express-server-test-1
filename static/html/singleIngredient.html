@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- spinner gif by loading.io -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/mealSetup.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="/static/js/mealSetup.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+            <li><a href="signup.html">Sign Up</a> </li>
+            <li><a href="login.html">Log In</a> </li>
+            <li><a href="signout.html">Sign Out</a> </li>
+        </ul>
+    </nav>
+
+    <div id="loading-foodinspector">
+        <img src="loading.gif" alt="loading">
+    </div>
+
+    <div id="flexbox1">
+        <div id="box1">
+            <div id="mealInput">
+                <div id="box1-1-1">
+                    <label for="ingredient">Ingredient Search:</label>
+                    <input type="text" id="ingredient" placeholder="Enter ingredient" autocomplete="off">
+                    <button id="fillDropdownBtn" onclick="fillDropdown()">Search</button>
+                    <br>
+                    <label for="ingredient">Select Ingredient:</label>
+                    <select id="ingredientDropdown"></select>
+                    
+                    <br>
+                    <label for="quantity">Quantity (grams):</label>
+                    <input type="number" id="quantity" placeholder="Enter quantity" autocomplete="off">
+                    
+                    <label for="dateInput">Date & Time:</label>
+                    <input type="datetime-local" id="dateInput">
+
+                </div>
+                <ul id="ingredientList"></ul>
+                <button id="createMealBtn" onclick="createMeal()">Log Ingredient</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

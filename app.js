@@ -94,7 +94,7 @@ app.post('/fetch-data', async (req, res) => {
 
 // Endpoint to handle user creation
 app.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, name, weight, height } = req.body;
 
     try {
         console.log('Received signup request for username:', username);
@@ -119,8 +119,8 @@ app.post('/signup', async (req, res) => {
 
         // Insert new user into the Brugere table with the unique ID
         const insertUserQuery = `
-            INSERT INTO Brugere (id, Brugernavn, Password)
-            VALUES ('${userId}', '${username}', '${password}')
+            INSERT INTO Brugere (id, Brugernavn, Password, name, Weight, Height)
+            VALUES ('${userId}', '${username}', '${password}', '${name}', '${weight}', '${height}')
         `;
         await sql.query(insertUserQuery);
         console.log('User inserted into the Brugere table');
