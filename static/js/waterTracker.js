@@ -54,28 +54,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //Funktion der gemmer gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
 const brugerNavn = localStorage.getItem('Brugernavn');
-function saveTrackedMealsToDatabase(trackedMeals) {
+function saveTrackedWaterToDatabase(trackedWater) {
     
-    const meals = trackedMeals;
+    const water = trackedWater;
        
-    fetch('/track-meals', {
+    fetch('/track-water', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+        body: JSON.stringify({ brugerNavn, water }), // Stringify the entire object containing mealsData and id
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to save Trackedmeals to the database');
+            throw new Error('Failed to save Trackedwater to the database');
         }
         return response.json();
     })
     .then(data => {
-        console.log('TrackedMeals saved to the database:', data);
+        console.log('TrackedWater saved to the database:', data);
     })
     .catch(error => {
-        console.error('Error saving Trackedmeals to the database:', error);
+        console.error('Error saving TrackedWater to the database:', error);
     });
 }
 
@@ -96,6 +96,7 @@ dateAndTime: dateAndTime
 const trackedWater = JSON.parse(localStorage.getItem('trackedWater')) || [];
 trackedWater.push(waterLog);
 // Gemmer trackedWater i localStorage
+saveTrackedWaterToDatabase(JSON.stringify(trackedWater));
 localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
         // Opdaterer siden med den nye vand-log
         renderTrackedWater(waterLog);
@@ -116,6 +117,7 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
             editedWaterLog.dateAndTime = newDateAndTime;
 
             // Gemmer den opdaterede vand-log i localStorage
+            saveTrackedWaterToDatabase(JSON.stringify(trackedWater));
             localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
             
             // Opdaterer siden ved at tømme og gendindlæse vandloggene
@@ -132,6 +134,7 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
         const updatedTrackedWater = trackedWater.filter(log => log.id !== logId);
 
         // Gemmer den opdaterede vand-log i localStorage
+        saveTrackedWaterToDatabase(JSON.stringify(updatedTrackedWater));
         localStorage.setItem('trackedWater', JSON.stringify(updatedTrackedWater));
 
         // Opdaterer siden ved at tømme og gendindlæse vandloggene

@@ -229,7 +229,7 @@ app.post('/track-meals', async (req, res) => {
 
 //kopi af TrackedMeals til vand
 app.post('/track-water', async (req, res) => {
-    const { meals, brugerNavn } = req.body;
+    const { water, brugerNavn } = req.body;
     
     try {
         // Connect to the database
@@ -238,24 +238,21 @@ app.post('/track-water', async (req, res) => {
         // Update meals in the database
         const updateMealQuery = `
             UPDATE Brugere
-            SET trackedWater = '${meals}'
+            SET trackedWater = '${water}'
             WHERE Brugernavn = '${brugerNavn}';
         `;
 
-        // Convert meals array to JSON string
-       // const mealsJson = JSON.stringify(meals);
-
         await sql.query(updateMealQuery, {
-            meals: meals, // Convert meals array to JSON string
+            water: water, // Convert meals array to JSON string
             brugerNavn: brugerNavn
         });
 
         // Close the connection
         await sql.close();
 
-        res.json({ success: true, message: 'TrackedMeal saved to the database' });
+        res.json({ success: true, message: 'Trackedwater saved to the database' });
     } catch (error) {
-        console.error('Error saving Trackedmeal to the database:', error);
+        console.error('Error saving Trackedwater to the database:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });
