@@ -201,18 +201,17 @@ function updateIngredientList() {
     hideLoadingOverlay();
 }
 
+//Henter brugernavn af den loggede ind brugere 
 const brugerNavn = localStorage.getItem('Brugernavn');
-// Add this function to your client-side JavaScript file
+//funktion til at gemme måltids til databasen.
 function saveMealsToDatabase(mealsData) {
-    
     const meals = mealsData;
-       
     fetch('/save-meals', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+        body: JSON.stringify({ brugerNavn, meals }),
     })
     .then(response => {
         if (!response.ok) {

@@ -177,9 +177,6 @@ app.post('/save-meals', async (req, res) => {
             WHERE Brugernavn = '${brugerNavn}';
         `;
 
-        // Convert meals array to JSON string
-       // const mealsJson = JSON.stringify(meals);
-
         await sql.query(updateMealQuery, {
             meals: meals, // Convert meals array to JSON string
             brugerNavn: brugerNavn
