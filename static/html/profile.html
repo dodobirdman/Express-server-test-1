@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- spinner gif by loading.io --> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+            <li><a href="profile.html" id="profileLink">Profile</a> </li>
+        </ul>
+    </nav>
+
+    <div id="flexbox">
+        <div id="access-box">
+            <a href="login.html" id="loginLink">Login</a>
+            <a href="signup.html" id="signupLink">Sign up</a>
+            <a href="signout.html" id="signoutLink">Sign out</a>
+            <div id="userData" style="display:none;">
+                <p id="userName"></p>
+                <p id="userHeight"></p>
+                <button id="editHeight">Edit Height</button>
+                <p id="userWeight"></p>
+                <button id="editWeight">Edit Weight</button>
+                <p id="userAge"></p>
+                <button id="editAge">Edit Age</button>
+                <p id="userSex"></p>
+                <button id="editSex">Edit Sex</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/profile.js">
+        
+    </script>
+</body>
+</html>

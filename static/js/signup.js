@@ -9,13 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('name').value;
         const height = document.getElementById('height').value;
         const weight = document.getElementById('weight').value;
+        const age = document.getElementById('age').value;
+        const sex = document.getElementById('sex').value;
         try {
             const response = await fetch('/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password, name, height, weight })
+                body: JSON.stringify({ username, password, name, height, weight, age, sex })
             });
 
             if (response.ok) {

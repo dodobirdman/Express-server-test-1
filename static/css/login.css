@@ -165,6 +165,17 @@ input {
     box-sizing: border-box; /* Added box-sizing */
 }
 
+select {
+    text-align: center;
+    border: 2px solid #797474;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    width: calc(100% - 20px); /* Adjusted width */
+    box-sizing: border-box; /* Added box-sizing */
+
+}
+
 button {
     border-radius: 10px;
     background-color: #91C789;

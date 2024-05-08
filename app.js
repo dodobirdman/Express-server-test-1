@@ -94,7 +94,7 @@ app.post('/fetch-data', async (req, res) => {
 
 // Endpoint to handle user creation
 app.post('/signup', async (req, res) => {
-    const { username, password, name, weight, height } = req.body;
+    const { username, password, name, weight, height, age, sex } = req.body;
 
     try {
         console.log('Received signup request for username:', username);
@@ -119,8 +119,8 @@ app.post('/signup', async (req, res) => {
 
         // Insert new user into the Brugere table with the unique ID
         const insertUserQuery = `
-            INSERT INTO Brugere (id, Brugernavn, Password, name, Weight, Height)
-            VALUES ('${userId}', '${username}', '${password}', '${name}', '${weight}', '${height}')
+            INSERT INTO Brugere (id, Brugernavn, Password, name, Weight, Height, age, Sex)
+            VALUES ('${userId}', '${username}', '${password}', '${name}', '${weight}', '${height}', '${age}', '${sex}')
         `;
         await sql.query(insertUserQuery);
         console.log('User inserted into the Brugere table');
@@ -257,4 +257,58 @@ app.post('/track-water', async (req, res) => {
     }
 });
 
+app.post('/save-Data', async (req, res) => {
+    const { newData, brugerNavn, datatype} = req.body;
+    console.log('Received datatype:', datatype);
+    
+    try {
+        // Connect to the database
+        await sql.connect(config);
+        let updateDataQuery;
+
+       
+        // Check the datatype and construct the query accordingly
+        if (datatype === 'Sex') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET Sex = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
+        } else if (datatype === 'age') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET age = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
+        } else if (datatype === 'Weight') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET Weight = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
+        } else if (datatype === 'Height') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET Height = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
+        } else {
+            throw new Error('Invalid datatype');
+        }
+
+        // Execute the constructed query
+        await sql.query(updateDataQuery, {
+            newData: newData,
+            brugerNavn: brugerNavn,
+        });
+
+        // Close the connection
+        await sql.close();
+
+        res.json({ success: true, message: 'Data saved to the database' });
+    } catch (error) {
+        console.error('Error saving data to the database:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});
 
