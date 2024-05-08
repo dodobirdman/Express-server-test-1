@@ -189,7 +189,87 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Funktion til at redigere et tracked måltid
         window.editMeal = function (mealId) {
             const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
+        
+            const editedMealIndex = trackedMeals.findIndex(meal => meal.id === mealId);
+            
+            // If-statement to check if the meal is found in trackedMeals
+            if (editedMealIndex !== -1) {
+                const editedMeal = trackedMeals[editedMealIndex];
+                const currentGramsEaten = editedMeal.gramsEaten;
+        
+                // Prompt to edit the grams eaten for the meal
+                const newGramsEaten = parseFloat(prompt(`Edit grams eaten for ${editedMeal.name}:`, currentGramsEaten)) || 0;
+                if (newGramsEaten === 0) {
+                    alert('Invalid input. Grams eaten must be greater than 0.');
+                    return;
+                }
+        
+                // Calculate the ratio of old and new weights
+                const weightRatio = newGramsEaten / currentGramsEaten;
+        
+                // Update the nutritional values based on the ratio
+                const updatedTotalNutrition = {
+                    calories: editedMeal.totalNutrition.calories * weightRatio,
+                    protein: editedMeal.totalNutrition.protein * weightRatio,
+                    fat: editedMeal.totalNutrition.fat * weightRatio,
+                    fiber: editedMeal.totalNutrition.fiber * weightRatio,
+                };
+        
+                // Prompt to edit the date & time for the meal
+                const newDateEaten = prompt(`Edit date & time for ${editedMeal.name}:`, editedMeal.dateEaten);
+        
+                // Update the edited meal with new values
+                editedMeal.gramsEaten = newGramsEaten;
+                editedMeal.dateEaten = newDateEaten || editedMeal.dateEaten;
+                editedMeal.totalNutrition = updatedTotalNutrition;
+        
+                // Update trackedMeals array
+                trackedMeals[editedMealIndex] = editedMeal;
+        
+                // Update trackedMeals in localStorage
+                localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
+        
+                // Call the function to save trackedMeals to the database
+                saveTrackedMealsToDatabase(trackedMeals);
+        
+                // Clear and re-render the list of tracked meals
+                trackedMealsList.innerHTML = '';
+                trackedMeals.forEach(renderTrackedMeal);
+            } else {
+                console.error('Error: Meal not found in trackedMeals.');
+            }
+        };
+        
+
+        // Funktion til at slette et tracked måltid
+        window.deleteMeal = function (mealId) {
+            const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
+            const updatedTrackedMeals = trackedMeals.filter(meal => meal.id !== mealId);
+            //funktion der sørger for databasen også bliver opdateret
+            saveTrackedMealsToDatabase(JSON.stringify(updatedTrackedMeals));
+            localStorage.setItem('trackedMeals', JSON.stringify(updatedTrackedMeals));
+
+            // Sletter den gamle liste og viser den nye liste med måltider
+            trackedMealsList.innerHTML = '';
+            updatedTrackedMeals.forEach(renderTrackedMeal);
+        };
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+
+
+/*
+
+Gemmer en kopi af editMeal
+
+// Funktion til at redigere et tracked måltid
+        window.editMeal = function (mealId) {
+            const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
+
             const createdMeals = JSON.parse(localStorage.getItem('createdMeals'))
+            
             const editedMeal = trackedMeals.find(meal => meal.id === mealId);
             // If-statement til at redigere måltidet hvis den er fundet i localStorage
             if (editedMeal) {
@@ -214,19 +294,4 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         };
 
-        // Funktion til at slette et tracked måltid
-        window.deleteMeal = function (mealId) {
-            const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
-            const updatedTrackedMeals = trackedMeals.filter(meal => meal.id !== mealId);
-            //funktion der sørger for databasen også bliver opdateret
-            saveTrackedMealsToDatabase(JSON.stringify(updatedTrackedMeals));
-            localStorage.setItem('trackedMeals', JSON.stringify(updatedTrackedMeals));
-
-            // Sletter den gamle liste og viser den nye liste med måltider
-            trackedMealsList.innerHTML = '';
-            updatedTrackedMeals.forEach(renderTrackedMeal);
-        };
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
+        */

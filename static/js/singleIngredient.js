@@ -1,32 +1,15 @@
-
-// Laver en tom variabel til at holde måltidsdata
-let mealData = {
-    name: "",
-    ingredients: []
-};
-
-// Deklarer en global variabel til foodID og foodName
-let currentFood = null; 
-
-// Funktion der viser en loading-GIF
-function showLoadingOverlay() {
-    document.getElementById('loading-foodinspector').style.display = 'flex';
-}
-
-// Funktion der fjerner loading-GIF'en
-function hideLoadingOverlay() {
-    document.getElementById('loading-foodinspector').style.display = 'none';
-}
-
-
 // Function to fill the dropdown with food items
 async function fillDropdown() {
     showLoadingOverlay();
     const ingredient = document.getElementById("ingredient").value.trim(); // Get the ingredient from the input field
     const apiKey = "168902";
+    console.log("Test");
+    fillDateTimeInput();
+
     // Check if the ingredient field is empty
     if (!ingredient) {
         alert("Please enter an ingredient.");
+        hideLoadingOverlay();
         return;
     }
 
@@ -57,8 +40,18 @@ async function fillDropdown() {
     hideLoadingOverlay();
 }
 
+// Function to show loading overlay
+function showLoadingOverlay() {
+    document.getElementById('loading-foodinspector').style.display = 'flex';
+}
+
+// Function to hide loading overlay
+function hideLoadingOverlay() {
+    document.getElementById('loading-foodinspector').style.display = 'none';
+}
+
 // Add an event listener to the "ingredient" input field
-document.getElementById("ingredient").addEventListener("keydown", function(event) {
+document.getElementById("ingredient").addEventListener("keydown", function (event) {
     // Check if the pressed key is the Enter key
     if (event.key === "Enter") {
         // Prevent the default action of the Enter key (form submission)
@@ -68,29 +61,65 @@ document.getElementById("ingredient").addEventListener("keydown", function(event
     }
 });
 
-// Add an event listener to the "quantity" input field
-document.getElementById("quantity").addEventListener("keydown", function(event) {
+document.getElementById("quantity").addEventListener("keydown", function (event) {
     // Check if the pressed key is the Enter key
     if (event.key === "Enter") {
         // Prevent the default action of the Enter key (form submission)
         event.preventDefault();
         // Trigger the click event of the "Add Ingredient" button
-        document.getElementById("addIngredientButton").click();
+        document.getElementById("createMealBtn").click();
     }
 });
 
-// Funktion der henter nutrition values fra API'en, med foodID'en fra getFoodID
+document.getElementById("dateInput").addEventListener("keydown", function (event) {
+    // Check if the pressed key is the Enter key
+    if (event.key === "Enter") {
+        // Prevent the default action of the Enter key (form submission)
+        event.preventDefault();
+        // Trigger the click event of the "Add Ingredient" button
+        document.getElementById("createMealBtn").click();
+    }
+});
+
+//Funktion der gemmer gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
+const brugerNavn = localStorage.getItem('Brugernavn');
+function saveTrackedMealsToDatabase(trackedMeals) {
+
+    const meals = trackedMeals;
+
+    fetch('/track-meals', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to save Trackedmeals to the database');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('TrackedMeals saved to the database:', data);
+            window.location.href = "mealTracker.html";
+        })
+        .catch(error => {
+            console.error('Error saving Trackedmeals to the database:', error);
+        });
+}
+
+
+// Function to get nutrition values from API
 async function getNutritionValues(foodID, quantity) {
     showLoadingOverlay();
     const apiKey = "168902";
-    // Tager alle 4 sortKeys så man kan nemt kalde API'en flere gange
     const sortKeys = [1030, 1110, 1310, 1240];
-    // Laver en tom variabel til at holde nutrition values
     let nutritionValues = { calories: 0, protein: 0, fat: 0, fiber: 0 };
-    // En for loop der bruger "for of" i stedet for et indeks (i) loop, der kalder API'en for hver sortKey
+
+    // Loop through each sortKey and fetch nutrition values
     for (const sortKey of sortKeys) {
         const apiUrl = `https://nutrimonapi.azurewebsites.net/api/FoodCompSpecs/ByItem/${foodID}/BySortKey/${sortKey}`;
-        // Prøver at hente nutrition values fra API'en
         try {
             const response = await fetch(apiUrl, {
                 method: 'GET',
@@ -100,14 +129,9 @@ async function getNutritionValues(foodID, quantity) {
             });
             const result = await response.json();
 
-            // Tager svaret fra API'en og sætter resVal ind i nutritionValues
             if (result.length > 0) {
-                // Ændrer komma til punktum, så det kan bruges i parseFloat
                 const valuePer100g = parseFloat(result[0].resVal.replace(',', '.'));
-                // Beregner næringsværdien for den mængde der er indtastet
                 const value = valuePer100g * (quantity / 100);
-                // Switch case der sætter den rigtige næringsværdi ind i nutritionValues, 
-                // baseret på hvilken sortKey der er blevet brugt i API'en
                 switch (sortKey) {
                     case 1030:
                         nutritionValues.calories += value;
@@ -125,135 +149,90 @@ async function getNutritionValues(foodID, quantity) {
                         break;
                 }
             }
-        } 
-            // Fejlbesked hvis der er en fejl med at hente næringsværdierne
-            catch (error) {
+        } catch (error) {
             console.error(`Error fetching nutrition values for sortKey ${sortKey}:`, error);
             throw new Error(`Error fetching nutrition values for sortKey ${sortKey}. Please check console for details.`);
         }
     }
-    
     hideLoadingOverlay();
-    // Returnerer næringsværdierne
     return nutritionValues;
-    
 }
 
-function addIngredient() {
-    const mealName = document.getElementById("mealName").value;
+// Function to auto-fill the date and time input field
+function fillDateTimeInput() {
+    const dateInput = document.getElementById('dateInput');
+    const currentDate = new Date();
+    const currentDatetime = currentDate.toISOString().slice(0, 16);
+    dateInput.value = currentDatetime;
+}
+
+// Call the fillDateTimeInput function when the page loads
+fillDateTimeInput();
+
+// Function to get the user's location
+function getUserLocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    resolve({ latitude, longitude });
+                },
+                error => {
+                    reject(error);
+                }
+            );
+        } else {
+            reject(new Error('Geolocation is not supported by this browser.'));
+        }
+    });
+}
+
+// Function to log a single ingredient as a meal
+window.logIngredient = async function () {
+    const ingredientName = document.getElementById("ingredientDropdown").options[document.getElementById("ingredientDropdown").selectedIndex].text;
     const selectedFoodID = document.getElementById("ingredientDropdown").value;
+
+    console.log("Ingredient Name:", ingredientName);
+    console.log("Selected Food ID:", selectedFoodID);
+
     const quantity = document.getElementById("quantity").value;
+    const dateEaten = document.getElementById("dateInput").value; // Get the value of the date and time input field
 
     // Check if all fields are filled
-    if (!mealName || !selectedFoodID || !quantity) {
+    if (!ingredientName || !selectedFoodID || !quantity || !dateEaten) {
         alert("Please fill all fields.");
         return;
     }
 
     // Call getNutritionValues with the selected food ID
-    getNutritionValues(selectedFoodID, quantity)
-        .then(nutritionValues => {
-            // Add ingredient to mealData
-            mealData.name = mealName;
-            mealData.ingredients.push({
-                foodID: selectedFoodID,
-                foodName: document.getElementById("ingredientDropdown").options[document.getElementById("ingredientDropdown").selectedIndex].text,
-                quantity: quantity,
-                nutrition: nutritionValues
-            });
+    try {
+        const nutritionValues = await getNutritionValues(selectedFoodID, quantity);
+        const location = await getUserLocation();
+        const trackedMeal = {
+            id: new Date().getTime(), // Using timestamp as ID
+            name: ingredientName, // Name of the ingredient as meal name
+            gramsEaten: parseFloat(quantity),
+            totalNutrition: nutritionValues,
+            dateEaten: dateEaten, // Use the value from the date and time input field
+            latitude: location.latitude, // Leave as null for now, can be added later
+            longitude: location.longitude // Leave as null for now, can be added later
+        };
 
-            // Update ingredient list
-            updateIngredientList();
-
-            // Clear the "Ingredient" text input box
-            document.getElementById("ingredient").value = "";
-
-            // Clear the "ingredientDropdown" dropdown list
-            document.getElementById("ingredientDropdown").innerHTML = "";
-
-            // Clear the quantity text input
-            document.getElementById("quantity").value = "";
-        })
-        .catch(error => {
-            alert(error.message);
-        });
-}
-
-// Funktion der opdaterer ingredienslisten
-function updateIngredientList() {
-    const ingredientList = document.getElementById("ingredientList");
-    // Nulstiller listen hver gang en ingrediens er tilføjet
-    ingredientList.innerHTML = "";
-
-    // Opdaterer listen med de nuværende ingredienser og den nye ingrediens
-    mealData.ingredients.forEach(({ foodName, quantity, nutrition }) => {
-        // Laver en li til hver ingrediens
-        const listItem = document.createElement("li");
-        // Sætter indholdet af li'en til navn, mængde og næringsværdier
-        listItem.textContent = `${foodName} - ${quantity} grams 
-        (Calories: ${nutrition.calories.toFixed(2)}, 
-        Protein: ${nutrition.protein.toFixed(2)}, 
-        Fat: ${nutrition.fat.toFixed(2)}, 
-        Fiber: ${nutrition.fiber.toFixed(2)})`;
-        ingredientList.appendChild(listItem);
-    });
-    // Fjerner loading-GIF'en
-    hideLoadingOverlay();
-}
-
-const brugerNavn = localStorage.getItem('Brugernavn');
-// Add this function to your client-side JavaScript file
-function saveMealsToDatabase(mealsData) {
-    
-    const meals = mealsData;
-       
-    fetch('/save-meals', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save meals to the database');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Meals saved to the database:', data);
-    })
-    .catch(error => {
-        console.error('Error saving meals to the database:', error);
-    });
-}
+        // Update or create trackedMeals in localStorage
+        const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
+        trackedMeals.push(trackedMeal);
+        saveTrackedMealsToDatabase(JSON.stringify(trackedMeals));
+        localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
+        
 
 
-// Funktion der opretter et måltid
-function createMeal() {
-    // Alert hvis der er ingen ingredienser
-    if (mealData.ingredients.length === 0) {
-        alert("Please add at least one ingredient.");
-        return;
+    } catch (error) {
+        console.error('Error logging ingredient:', error);
+        alert('Error logging ingredient. Please try again later.');
     }
+};
 
-    // Henter eksisterende måltider fra localStorage eller opretter en tom liste
-    let createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
 
-    // Tilføjer det aktuelle måltid til listen af måltider
-    createdMeals.push(mealData);
-    console.log(mealData);
 
-    // Gemmer listen af måltider tilbage i localStorage
-    saveMealsToDatabase(JSON.stringify(createdMeals));
-    localStorage.setItem('createdMeals', JSON.stringify(createdMeals));
-
-    // Nulstiller mealData og ingredienslisten
-    mealData = { name: "", ingredients: [] };
-    // Opdaterer ingredienslisten så den er tom
-    updateIngredientList();
-    // Nulstiller input felterne
-    document.getElementById("mealName").value = "";
-    // Sender brugeren tilbage til Meal Creator
-    window.location.href = "mealCreator.html"
-}
