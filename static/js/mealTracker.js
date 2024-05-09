@@ -13,10 +13,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             mealDropdown.appendChild(option);
         });
 
-        // Set current date and time in the date input field
+        // Autofill date and time input fields
         const dateInput = document.getElementById('dateInput');
-        const currentDate = new Date();
-        const currentDatetime = currentDate.toISOString().slice(0, 16);
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const currentDatetime = `${year}-${month}-${day}T${hours}:${minutes}`;
         dateInput.value = currentDatetime;
 
         // Henter de tidligere tracked meals fra localStorage når siden loader

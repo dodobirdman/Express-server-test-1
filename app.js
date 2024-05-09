@@ -277,6 +277,18 @@ app.post('/save-Data', async (req, res) => {
                 SET age = '${newData}'
                 WHERE Brugernavn = '${brugerNavn}';
             `;
+        } else if (datatype === 'BMR') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET BMR = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
+        } else if (datatype === 'trackedActivity') {
+            updateDataQuery = `
+                UPDATE Brugere
+                SET trackedActivity = '${newData}'
+                WHERE Brugernavn = '${brugerNavn}';
+            `;
         } else if (datatype === 'Weight') {
             updateDataQuery = `
                 UPDATE Brugere
