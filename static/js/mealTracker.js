@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
         
                 // Call the function to save trackedMeals to the database
-                saveTrackedMealsToDatabase(trackedMeals);
+                saveTrackedMealsToDatabase(JSON.stringify(trackedMeals));
         
                 // Clear and re-render the list of tracked meals
                 trackedMealsList.innerHTML = '';
