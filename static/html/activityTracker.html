@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Tracker</title>
+    <link rel="stylesheet" href="/static/css/activityTracker.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    <script src="/static/js/activityTracker.js" defer></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul>
+            <li id="logo">NutriTracker</li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="mealCreator.html">Meal Creator</a></li>
+            <li><a href="mealTracker.html">Meal Tracker</a></li>
+            <li><a href="activityTracker.html">Activity Tracker</a></li>
+            <li><a href="nutriReport.html">Nutri Report</a></li>
+            <li><a href="foodInspector.html">Food Inspector</a> </li>
+            <li><a href="profile.html">Profile</a> </li>
+        </ul>
+    </nav>
+
+    <div id="flexbox1">
+        <div id="box1">
+            <div id="trackerHeader">
+                Activity Tracker
+            </div>
+            <div id="trackerInputs">
+                <select id="activity">
+                    <option value="0"> Select an activity...</option>
+                    <option value="215">Almindelig gang</option>
+                    <option value="414">Gang ned af trapper</option>
+                    <option value="1079">Gang op af trapper</option>
+                    <option value="281">Slå græs med manuel græsslåmaskine</option>
+                    <option value="236">Lave mad og redde senge</option>
+                    <option value="362">Luge ukrudt</option>
+                    <option value="481">Rydde sne</option>
+                    <option value="74">Læse eller se TV</option>
+                    <option value="89">Stå oprejst</option>
+                    <option value="310">Cykling i roligt tempo</option>
+                    <option value="163">Tørre støv af</option>
+                    <option value="281">Vaske gulv</option>
+                    <option value="259">Pudse vinduer</option>
+                    <option value="814">Cardio</option>
+                    <option value="348">Hård styrketræning</option>
+                    <option value="318">Badminton</option>
+                    <option value="318">Volleyball</option>
+                    <option value="236">Bordtennis</option>
+                    <option value="355">Dans i højt tempo</option>
+                    <option value="259">Dans i moderat tempo</option>
+                    <option value="510">Fodbold</option>
+                    <option value="384">Rask gang</option>
+                    <option value="244">Golf</option>
+                    <option value="466">Håndbold</option>
+                    <option value="466">Squash</option>
+                    <option value="666">Jogging</option>
+                    <option value="405">Langrend</option>
+                    <option value="872">Løb i moderat tempo</option>
+                    <option value="1213">Løb i hurtigt tempo</option>
+                    <option value="414">Ridning</option>
+                    <option value="273">Skøjteløb</option>
+                    <option value="296">Svømning</option>
+                    <option value="658">Cykling i højt tempo</option>
+                    <option value="259">Bilreparation</option>
+                    <option value="414">Gravearbejde</option>
+                    <option value="236">Landbrugsarbejde</option>
+                    <option value="185">Let kontorarbejde</option>
+                    <option value="215">Male hus</option>
+                    <option value="207">Murerarbejde</option>
+                    <option value="1168">Hugge og slæbe på brænde</option>
+                </select>
+
+                <input type="number" id="duration" placeholder="Duration (minutes)">
+
+                <label for="datetime">Select a date and time:</label>
+                <input type="datetime-local" id="datetime" name="datetime">
+
+                <button id="addActivity">Add Activity</button>
+            </div>
+            <div id="trackerLog">
+                <ul id="activityList">
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
