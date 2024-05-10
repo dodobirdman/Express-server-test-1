@@ -90,3 +90,91 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
+
+#editHeight {
+    text-decoration: none;
+    color: black;
+    background-color: #91c789; 
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block; 
+    white-space: nowrap; 
+    border: none; 
+    box-shadow: none;
+}
+#editHeight:hover {
+    cursor: pointer; 
+    background-color: #DEF6D8; 
+    color: #333; 
+}
+
+#editWeight {
+    text-decoration: none;
+    color: black;
+    background-color: #91c789; 
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block; 
+    white-space: nowrap; 
+    border: none; 
+    box-shadow: none;
+}
+#editWeight:hover {
+    cursor: pointer; 
+    background-color: #DEF6D8; 
+    color: #333; 
+}
+
+#editAge {
+    text-decoration: none;
+    color: black;
+    background-color: #91c789; 
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block; 
+    white-space: nowrap; 
+    border: none; 
+    box-shadow: none;
+}
+#editAge:hover {
+    cursor: pointer; 
+    background-color: #DEF6D8; 
+    color: #333; 
+}
+
+#editSex {
+    text-decoration: none;
+    color: black;
+    background-color: #91c789; 
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block; 
+    white-space: nowrap; 
+    border: none; 
+    box-shadow: none;
+}
+#editSex:hover {
+    cursor: pointer; 
+    background-color: #DEF6D8; 
+    color: #333; 
+}
+
+#deleteProfile {
+    margin-right: 5px;
+    align-self: center;
+    background-color: #ff6961; 
+    color: #fff; 
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+#deleteProfile:hover {
+    background-color: #ff8c84;
+    color: #797878;
+}

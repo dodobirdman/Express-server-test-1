@@ -79,12 +79,6 @@ body {
 
 #box1-2 {
     display: flex;
-    justify-content: center;
-    text-align: center;
-}
-
-#box1-2 {
-    display: flex;
     height: 50px;
     margin-top: 10px;
     justify-content: space-evenly;
@@ -116,4 +110,65 @@ body {
     padding: 5px;
     border-radius: 10px;
 
+}
+
+#box1-3 {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 20px;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+
+
+th {
+    background-color: #DEF6D8;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+
+tr:nth-child(even) {
+    background-color: #F5F5F5;
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#buttons button{
+    text-decoration: none;
+    color: white;
+    background-color: #91c789; 
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block; 
+    white-space: nowrap; 
+    border: none; 
+    box-shadow: none;
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#buttons button:hover{
+    cursor: pointer; 
+    background-color: #DEF6D8; 
+    color: #333; 
 }
