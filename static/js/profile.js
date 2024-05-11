@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     // Add this function to your client-side JavaScript file
     function deleteProfileToDatabase(brugerNavn) {
         
-        fetch('/delete-meals', {
+        fetch('/delete-profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -84,7 +84,19 @@ app.post('/fetch-data', async (req, res) => {
         await sql.connect(config);
 
         // Query to select data for the specific user
-        const result = await sql.query`SELECT * FROM Brugere WHERE Brugernavn = ${username}`;
+        const result = await sql.query`
+        SELECT * FROM Brugere WHERE Brugernavn = ${username}
+        
+        SELECT * FROM Activities WHERE Brugernavn = ${username}
+
+        SELECT * FROM CreatedMeals WHERE Brugernavn = ${username}
+        
+        SELECT * FROM TrackedMeals WHERE Brugernavn = ${username}
+
+        SELECT * FROM TrackedWater WHERE Brugernavn = ${username}
+
+        
+        `;
 
         // Check if the user exists
         if (result.recordset.length === 0) {
@@ -135,6 +147,19 @@ app.post('/signup', async (req, res) => {
         const insertUserQuery = `
             INSERT INTO Brugere (id, Brugernavn, Password, name, Weight, Height, age, Sex)
             VALUES ('${userId}', '${username}', '${password}', '${name}', '${weight}', '${height}', '${age}', '${sex}')
+
+            INSERT INTO CreatedMeals (Brugernavn)
+            VALUES ('${username}')
+
+            INSERT INTO TrackedMeals (Brugernavn)
+            VALUES ('${username}')
+
+            INSERT INTO TrackedWater (Brugernavn)
+            VALUES ('${username}')
+
+            INSERT INTO Activities (Brugernavn)
+            VALUES ('${username}')
+
         `;
         await sql.query(insertUserQuery);
         console.log('User inserted into the Brugere table');
@@ -186,7 +211,7 @@ app.post('/save-meals', async (req, res) => {
 
         // Update meals in the database
         const updateMealQuery = `
-            UPDATE Brugere
+            UPDATE CreatedMeals
             SET createdMeals = '${meals}'
             WHERE Brugernavn = '${brugerNavn}';
         `;
@@ -215,7 +240,7 @@ app.post('/track-meals', async (req, res) => {
 
         // Update meals in the database
         const updateMealQuery = `
-            UPDATE Brugere
+            UPDATE TrackedMeals
             SET trackedMeals = '${meals}'
             WHERE Brugernavn = '${brugerNavn}';
         `;
@@ -248,7 +273,7 @@ app.post('/track-water', async (req, res) => {
 
         // Update meals in the database
         const updateMealQuery = `
-            UPDATE Brugere
+            UPDATE TrackedWater
             SET trackedWater = '${water}'
             WHERE Brugernavn = '${brugerNavn}';
         `;
@@ -293,14 +318,14 @@ app.post('/save-Data', async (req, res) => {
             `;
         } else if (datatype === 'BMR') {
             updateDataQuery = `
-                UPDATE Brugere
+                UPDATE Activities
                 SET BMR = '${newData}'
                 WHERE Brugernavn = '${brugerNavn}';
             `;
         } else if (datatype === 'trackedActivity') {
             updateDataQuery = `
-                UPDATE Brugere
-                SET trackedActivity = '${newData}'
+                UPDATE Activities
+                SET activity = '${newData}'
                 WHERE Brugernavn = '${brugerNavn}';
             `;
         } else if (datatype === 'Weight') {
@@ -336,7 +361,7 @@ app.post('/save-Data', async (req, res) => {
 });
 
 
-app.post('/delete-meals', async (req, res) => {
+app.post('/delete-profile', async (req, res) => {
     const { brugerNavn } = req.body;
     
     try {
@@ -346,6 +371,18 @@ app.post('/delete-meals', async (req, res) => {
         // Delete meals in the database
         const deleteMealQuery = `
         DELETE FROM Brugere
+        WHERE Brugernavn = '${brugerNavn}';
+        
+        DELETE FROM Activities
+        WHERE Brugernavn = '${brugerNavn}';
+
+        DELETE FROM CreatedMeals
+        WHERE Brugernavn = '${brugerNavn}';
+
+        DELETE FROM TrackedMeals
+        WHERE Brugernavn = '${brugerNavn}';
+
+        DELETE FROM TrackedWater
         WHERE Brugernavn = '${brugerNavn}';
         `;
 
