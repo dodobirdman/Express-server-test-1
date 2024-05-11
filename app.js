@@ -76,40 +76,29 @@ app.post('/login', async (req, res) => {
 
 app.post('/fetch-data', async (req, res) => {
     const { username } = req.body;
-
     try {
-        console.log('Received request to fetch data for username:', username);
-
-        // Connect to the database
+        // Etabler forbindelse til databasen
         await sql.connect(config);
-
-        // Query to select data for the specific user
+        // Foretag forespørgsel til databasen
         const result = await sql.query`
         SELECT * FROM Brugere WHERE Brugernavn = ${username}
-        
+
         SELECT * FROM Activities WHERE Brugernavn = ${username}
 
         SELECT * FROM CreatedMeals WHERE Brugernavn = ${username}
-        
+
         SELECT * FROM TrackedMeals WHERE Brugernavn = ${username}
-
-        SELECT * FROM TrackedWater WHERE Brugernavn = ${username}
-
         
+        SELECT * FROM TrackedWater WHERE Brugernavn = ${username}
         `;
-
-        // Check if the user exists
+        // Tjek hvis brugeren ikke findes
         if (result.recordset.length === 0) {
-            console.log('User not found');
             return res.status(404).send('User not found');
         }
-
-        // Send the fetched data to the client
+        // Send data til klienten
         res.json(result.recordset[0]);
 
-        console.log('Data sent to the client successfully.');
-
-        // Close the connection
+        // Luk forbindelsen til databasen
         await sql.close();
     } catch (err) {
         console.error('Error fetching data:', err);
