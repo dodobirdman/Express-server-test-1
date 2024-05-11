@@ -27,6 +27,7 @@ function loadMealData() {
                 const foodNameSpan = document.createElement("span");
                 foodNameSpan.textContent = ingredient.foodName;
                 foodNameSpan.className = "food-name-link";
+                foodNameSpan.setAttribute("data-food-id", ingredient.foodID);
                 ingredientItem.appendChild(foodNameSpan);
 
                 if (ingredient.nutrition) {
@@ -114,17 +115,17 @@ function saveMealsToDatabase(mealsData) {
 
 
 
-
+// Kører openFoodInspector hvis en food-name er clicket, ved at bruge foodID atrributtet
 document.getElementById("box1-2").addEventListener("click", function (event) {
     const clickedElement = event.target;
     if (clickedElement.classList.contains("food-name-link")) {
-        const foodName = clickedElement.textContent;
-        openFoodInspector(foodName);
+        const foodID = clickedElement.getAttribute("data-food-id"); 
+        openFoodInspector(foodID);
     }
 });
-
-function openFoodInspector(foodName) {
-    window.open(`foodInspector.html?foodName=${encodeURIComponent(foodName)}`, '_blank');
+// Funktion der tager foodID'en der blev trykket på og åbner en ny fane med Food Inspector
+function openFoodInspector(foodID) {
+    window.open(`/static/html/foodInspector.html?foodID=${encodeURIComponent(foodID)}`, '_blank');
 }
 
 function deleteMeal(mealName) {

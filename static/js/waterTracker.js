@@ -6,6 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // Finder div'en hvor data skal sættes ind
     const trackedWaterList = document.getElementById('trackedWaterList');
 
+    // Autofill dato og tid
+    const datetimeInput = document.getElementById("waterDateInput");
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, "0");
+    const day = now.getDate().toString().padStart(2, "0");
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const currentDatetime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    datetimeInput.value = currentDatetime;
+
     // Funktion til at sætte trackedWater ind i HTML
     function renderTrackedWater(waterLog) {
         // Laver en række til hver vand-log

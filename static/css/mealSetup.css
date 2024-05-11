@@ -113,6 +113,24 @@ body {
     border: 2px solid #569BD5;
 }
 
+#fillDropdownBtn {
+    color: black;
+    background-color: #569BD5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size:15px;
+    box-shadow: none;
+    
+}
+
+#fillDropdownBtn:hover {
+    background-color: #99D9DE;
+    color: #333;
+}
 
 #addIngredientButton {
     color: black;

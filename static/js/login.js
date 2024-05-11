@@ -1,9 +1,17 @@
+// Kode til at vise/fjerne en loading GIF imens JS venter på svar fra API'en
+function showLoadingOverlay() {
+    document.getElementById('loading-foodinspector').style.display = 'flex';
+}
+function hideLoadingOverlay() {
+    document.getElementById('loading-foodinspector').style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
 
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-
+        showLoadingOverlay();
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
 
@@ -20,8 +28,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.ok) {
-                const message = await response.text();
-                alert(message); // Display success message
 
                 // Set cookie upon successful login
                 document.cookie = `username=${username}; path=/`; // Set cookie with username
@@ -29,15 +35,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Call the function to fetch user data
                 await fetchUserData(username);
 
-                // Redirect to the dashboard
-                window.location.href = '/static/html/dashboard.html';
+                // Fjern loading GIF'en
+                hideLoadingOverlay();
+
+                // Redirect to profile page
+                window.location.href = '/static/html/profile.html';
             } else {
                 const errorMessage = await response.text();
                 alert(errorMessage); // Display error message
+                hideLoadingOverlay();
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred. Please try again.'); // Display generic error message
+            hideLoadingOverlay
         }
     });
 });

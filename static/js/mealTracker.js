@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 // Sætter en fast decimalplads på talværdierne
                 if (typeof value === 'number') {
-                    cell.textContent = value.toFixed(1);
+                    cell.textContent = value.toFixed(2);
                 } else {
                     cell.textContent = value;
 

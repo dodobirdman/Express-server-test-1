@@ -221,6 +221,7 @@ function saveMealsToDatabase(mealsData) {
     })
     .then(data => {
         console.log('Meals saved to the database:', data);
+        window.location.href = "mealCreator.html"
     })
     .catch(error => {
         console.error('Error saving meals to the database:', error);
@@ -253,8 +254,6 @@ function createMeal() {
     updateIngredientList();
     // Nulstiller input felterne
     document.getElementById("mealName").value = "";
-    // Sender brugeren tilbage til Meal Creator
-    window.location.href = "mealCreator.html"
 }
 
 

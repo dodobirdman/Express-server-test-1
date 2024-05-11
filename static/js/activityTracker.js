@@ -105,13 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Check if localStorage item exists, if not, create it
 const trackedActivity = JSON.parse(localStorage.getItem("trackedActivity"))|| [];
 
-/*
-if (!trackedActivity) {
-    trackedActivity = [];
-} else {
-    trackedActivity = JSON.parse(trackedActivity);
-}
-*/
+
 console.log(trackedActivity);
 
         console.log(trackedActivity);

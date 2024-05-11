@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", async function() {
-    var profileLink = document.getElementById("profileLink");
-    var loginLink = document.getElementById("loginLink");
-    var signupLink = document.getElementById("signupLink");
-    var signoutLink = document.getElementById("signoutLink");
-    var userDataDiv = document.getElementById("userData");
-    var userName = document.getElementById("userName");
-    var userHeight = document.getElementById("userHeight");
-    var userWeight = document.getElementById("userWeight");
-    var userAge = document.getElementById("userAge");
-    var userSex = document.getElementById("userSex");
+    let profileLink = document.getElementById("profileLink");
+    let loginLink = document.getElementById("loginLink");
+    let signupLink = document.getElementById("signupLink");
+    let signoutLink = document.getElementById("signoutLink");
+    let userDataDiv = document.getElementById("userData");
+    let userName = document.getElementById("userName");
+    let userHeight = document.getElementById("userHeight");
+    let userWeight = document.getElementById("userWeight");
+    let userAge = document.getElementById("userAge");
+    let userSex = document.getElementById("userSex");
     const deleteProfileButton = document.getElementById('deleteProfile');
 
     if (localStorage.getItem("Brugernavn") !== null) {
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             console.error('Error saving data to the database:', error);
         });
     }
-    deleteProfileButton.addEventListener('click', deleteProfileToDatabase(brugerNavn));
+
     async function fetchUserData(username) {
         try {
             const response = await fetch('/fetch-data', {
@@ -145,6 +145,13 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
     fetchUserData(brugerNavn);
 
+    deleteProfileButton.addEventListener('click', function() {
+        let confirmation = confirm("Are you sure you want to delete your profile?");
+        if (confirmation) {
+            deleteProfileToDatabase(brugerNavn);
+        }
+    });
+
     // Add this function to your client-side JavaScript file
     function deleteProfileToDatabase(brugerNavn) {
         
@@ -163,6 +170,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         })
         .then(data => {
             console.log('saved to the database:', data);
+            window.location.href = '/static/html/signout.html';
         })
         .catch(error => {
             console.error('Error saving to the database:', error);

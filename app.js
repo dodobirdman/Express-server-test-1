@@ -10,15 +10,29 @@ const PORT = 3000;
 app.use(logger('dev'));
 app.use(express.json());
 
-// Serve HTML files from the 'static/html' directory
-app.use(express.static(path.join(__dirname, 'static')));
+/*
+// Handle requests for HTML files with or without query parameters
+app.get('/foodInspector.html', function(req, res) {
+    const foodID = req.query.foodID;
+    if (foodID) {
+        // Redirect to the same route without the query parameter
+        res.redirect('/static/html/foodInspector.html');
+    } else {
+        // Serve the HTML file without the query parameter
+        const filePath = path.join(__dirname, 'static/html/foodInspector.html');
+        res.sendFile(filePath);
+    }
+});
+*/
 
-//app.use('/static/html', express.static(path.join(__dirname, 'static/html')))
+// Bruge HTML filer fra 'static/html'
+app.use(express.static(path.join(__dirname, 'static')));
 
 //Sørger for du bliver redirected til login siden først!
 app.get('/', (req, res) => {
     res.redirect('http://localhost:3000/static/html/login.html');
-  });
+});
+
 // Handle requests for files within the 'static' directory
 app.get('/static/*', function(req, res) {
     res.sendFile(path.join(__dirname, req.url));

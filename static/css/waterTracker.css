@@ -22,6 +22,44 @@ body {
     font-weight: bold;
 }
 
+#waterAmountInput {
+    width: 180px;
+    margin-right: 10px;
+    font-size: 15px;
+    background-color: #F2FFF5;
+    border: 2px solid #569BD5;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+#waterDateInput {
+    width: 250px;
+    margin-right: 10px;
+    font-size: 15px;
+    background-color: #F2FFF5;
+    border: 2px solid #569BD5;
+    border-radius: 8px;
+}
+
+#waterLogButton {
+    color: black;
+    background-color: #569BD5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size:15px;
+    box-shadow: none;
+    
+}
+
+#waterLogButton:hover {
+    background-color: #99D9DE;
+    color: #333;
+}
+
 .navbar ul li {
     margin-right: 30px;
     margin-left: 30px

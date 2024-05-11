@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const message = await response.text();
                 alert(message); // Display success message
+                window.location.href = '/static/html/login.html';
             } else {
                 const errorMessage = await response.text();
                 alert(errorMessage); // Display error message

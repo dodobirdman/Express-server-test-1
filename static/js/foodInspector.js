@@ -129,7 +129,14 @@ async function fillDropdown() {
 
 // Add event listener to the secondary button to trigger search for selected food item
 document.getElementById('searchSelected').addEventListener('click', function() {
-    const selectedFoodId = document.getElementById('foodDropdown').value;
+    let selectedFoodId = document.getElementById('foodDropdown').value;
+
+    // Check if foodID is present in the URL
+    const foodIDFromURL = getParameterByName('foodID');
+    if (foodIDFromURL) {
+        selectedFoodId = foodIDFromURL; // If foodID is present in URL, use that instead
+    }
+
     if (selectedFoodId) {
         foodLookup(selectedFoodId)
             .then(responses => Promise.all(responses.map(response => response.json())))
@@ -201,11 +208,32 @@ document.getElementById('searchSelected').addEventListener('click', function() {
                 console.error('Error fetching data:', error);
             });
     } else {
-        alert("Please select a food item from the dropdown.");
+        alert("Please select a food item from the dropdown or provide a foodID in the URL.");
     }
 });
 
 // Tjekker hvis der er en foodName i URL'en, og kører automatisk foodLookup hvis det er sandt
 if (getParameterByName('foodName')) {
-    window.onload = foodLookup;
+    const foodIDFromURL = getParameterByName('foodID');
+    if (foodIDFromURL) {
+        foodLookup(foodIDFromURL);
+    }
 }
+
+// Add event listener to the input field to detect Enter key press
+document.getElementById('foodLookup').addEventListener('keyup', function(event) {
+    // Check if the key pressed is Enter
+    if (event.key === 'Enter') {
+        // Trigger click event on the search button
+        document.getElementById('search').click();
+    }
+});
+
+// Add event listener to the dropdown to detect Enter key press
+document.getElementById('foodDropdown').addEventListener('keyup', function(event) {
+    // Check if the key pressed is Enter
+    if (event.key === 'Enter') {
+        // Trigger click event on the searchSelected button
+        document.getElementById('searchSelected').click();
+    }
+});

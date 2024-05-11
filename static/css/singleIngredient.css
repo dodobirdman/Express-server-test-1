@@ -108,11 +108,15 @@ body {
     border: 2px solid #569BD5;
 }
 
-#quantity {
+#dateInput{
     background-color: #F2FFF5;
     border: 2px solid #569BD5;
 }
 
+#quantity {
+    background-color: #F2FFF5;
+    border: 2px solid #569BD5;
+}
 
 #addIngredientButton {
     color: black;
@@ -155,3 +159,41 @@ body {
     width: 150px; 
     height: 150px; 
   }
+
+  #fillDropdownBtn {
+    color: black;
+    background-color: #569BD5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size:15px;
+    box-shadow: none;
+    
+}
+
+#fillDropdownBtn:hover {
+    background-color: #99D9DE;
+    color: #333;
+}
+
+#createMealBtn {
+    color: black;
+    background-color: #569BD5;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size:15px;
+    box-shadow: none;
+    margin-bottom: 15px;
+}
+
+#createMealBtn:hover {
+    background-color: #99D9DE;
+    color: #333;
+}
