@@ -321,3 +321,30 @@ app.post('/save-Data', async (req, res) => {
     }
 });
 
+
+app.post('/delete-meals', async (req, res) => {
+    const { brugerNavn } = req.body;
+    
+    try {
+        // Connect to the database
+        await sql.connect(config);
+
+        // Delete meals in the database
+        const deleteMealQuery = `
+        DELETE FROM Brugere
+        WHERE Brugernavn = '${brugerNavn}';
+        `;
+
+        await sql.query(deleteMealQuery, {
+            brugerNavn: brugerNavn
+        });
+
+        // Close the connection
+        await sql.close();
+
+        res.json({ success: true, message: 'Meals deleted from the database' });
+    } catch (error) {
+        console.error('Error deleting meals from the database:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+});

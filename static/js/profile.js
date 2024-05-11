@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     var userWeight = document.getElementById("userWeight");
     var userAge = document.getElementById("userAge");
     var userSex = document.getElementById("userSex");
+    const deleteProfileButton = document.getElementById('deleteProfile');
 
     if (localStorage.getItem("Brugernavn") !== null) {
         profileLink.style.display = "block";
@@ -82,7 +83,11 @@ document.addEventListener("DOMContentLoaded", async function() {
         signoutLink.style.display = "none";
     }
 
-    
+   
+
+
+
+
     const brugerNavn = localStorage.getItem('Brugernavn');
     // Add this function to your client-side JavaScript file
     function saveDataToDatabase(Data, Newdatatype) {
@@ -112,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             console.error('Error saving data to the database:', error);
         });
     }
-
+    deleteProfileButton.addEventListener('click', deleteProfileToDatabase(brugerNavn));
     async function fetchUserData(username) {
         try {
             const response = await fetch('/fetch-data', {
@@ -140,7 +145,30 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
     fetchUserData(brugerNavn);
 
-
+    // Add this function to your client-side JavaScript file
+    function deleteProfileToDatabase(brugerNavn) {
+        
+        fetch('/delete-meals', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({brugerNavn}), // Stringify the entire object containing mealsData and id
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to save to the database');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('saved to the database:', data);
+        })
+        .catch(error => {
+            console.error('Error saving to the database:', error);
+        });
+        
+    }
 
 });
 
