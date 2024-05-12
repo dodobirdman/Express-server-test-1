@@ -7,7 +7,7 @@ body {
 
 .navbar {
     background-color: #DEF6D8;
-    border-bottom: 1px solid #ccc; 
+    border-bottom: 1px solid #BDBDBD; 
     padding: 10px; 
 }
 
@@ -29,11 +29,11 @@ body {
 
 .navbar a {
     text-decoration: none;
-    color: #000;
+    color: #000000;
 }
 
 .navbar a:hover {
-    color: #797878;
+    color: #757575;
 }
 
 #logo {
@@ -73,17 +73,14 @@ body {
 }
 
 #access-box a:hover {
-    color: #797878;
+    color: #757575;
 }
 
 #userData {
     background-color: #99D9DE;
     border-radius: 10px;
-    
     margin: 20px;
     padding: 20px;
-
-
 }
 
 #userName {
@@ -93,7 +90,7 @@ body {
 
 #editHeight {
     text-decoration: none;
-    color: black;
+    color: #000000;
     background-color: #91c789; 
     padding: 5px 10px;
     border-radius: 5px;
@@ -106,12 +103,12 @@ body {
 #editHeight:hover {
     cursor: pointer; 
     background-color: #DEF6D8; 
-    color: #333; 
+    color: #424242; 
 }
 
 #editWeight {
     text-decoration: none;
-    color: black;
+    color: #000000;
     background-color: #91c789; 
     padding: 5px 10px;
     border-radius: 5px;
@@ -124,12 +121,12 @@ body {
 #editWeight:hover {
     cursor: pointer; 
     background-color: #DEF6D8; 
-    color: #333; 
+    color: #424242; 
 }
 
 #editAge {
     text-decoration: none;
-    color: black;
+    color: #000000;
     background-color: #91c789; 
     padding: 5px 10px;
     border-radius: 5px;
@@ -142,12 +139,12 @@ body {
 #editAge:hover {
     cursor: pointer; 
     background-color: #DEF6D8; 
-    color: #333; 
+    color: #424242; 
 }
 
 #editSex {
     text-decoration: none;
-    color: black;
+    color: #000000;
     background-color: #91c789; 
     padding: 5px 10px;
     border-radius: 5px;
@@ -160,14 +157,14 @@ body {
 #editSex:hover {
     cursor: pointer; 
     background-color: #DEF6D8; 
-    color: #333; 
+    color: #424242; 
 }
 
 #deleteProfile {
     margin-right: 5px;
     align-self: center;
-    background-color: #ff6961; 
-    color: #fff; 
+    background-color: #F29A8A; 
+    color: #FFFFFF; 
     border: none;
     padding: 10px;
     border-radius: 10px;
@@ -175,6 +172,6 @@ body {
     font-size: 20px;
 }
 #deleteProfile:hover {
-    background-color: #ff8c84;
-    color: #797878;
+    background-color: #F29A8A;
+    color: #424242;
 }

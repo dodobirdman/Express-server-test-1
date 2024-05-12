@@ -7,7 +7,7 @@ body {
 
 .navbar {
     background-color: #DEF6D8;
-    border-bottom: 1px solid #ccc; 
+    border-bottom: 1px solid #BDBDBD; 
     padding: 10px; 
 }
 
@@ -29,7 +29,7 @@ body {
 
 .navbar a {
     text-decoration: none;
-    color: #000;
+    color: #000000;
 }
 
 .navbar a:hover {
@@ -55,7 +55,7 @@ body {
     margin-left: 8%;
     margin-right: 8%;
     margin-bottom: 3%;
-    background-color: white;
+    background-color: #FFFFFF;
     border-style: solid;
     border-color: #99D9DE; 
     border-width: 2px;
@@ -134,13 +134,26 @@ body {
 
 #addIngredientButton:hover {
     background-color: #99D9DE;
-    color: #333;
+    color: #424242;
 }
 
 
+#createMealBtn {
+    color: #FFFFFF;
+    background-color: #91c789;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
 #createMealBtn:hover {
     background-color: #DEF6D8;
-    color: #333;
+    color: #424242;
 }
 
 #loading-foodinspector {
@@ -161,7 +174,7 @@ body {
   }
 
   #fillDropdownBtn {
-    color: black;
+    color: #FFFFFF;
     background-color: #569BD5;
     border: none;
     padding: 10px 20px;
@@ -169,31 +182,21 @@ body {
     display: inline-block;
     white-space: nowrap;
     cursor: pointer;
-    font-size:15px;
+    font-size: 15px;
     box-shadow: none;
-    
 }
 
 #fillDropdownBtn:hover {
     background-color: #99D9DE;
-    color: #333;
+    color: #424242;
 }
 
-#createMealBtn {
-    color: black;
-    background-color: #569BD5;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 9px;
-    display: inline-block;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size:15px;
-    box-shadow: none;
-    margin-bottom: 15px;
+#ingredientDropdown {
+    width: 180px;
+    margin-right: 10px;
+    font-size: 15px;
+    background-color: #F5F5F5;
+    border: 2px solid #569BD5;
 }
 
-#createMealBtn:hover {
-    background-color: #99D9DE;
-    color: #333;
-}
+
