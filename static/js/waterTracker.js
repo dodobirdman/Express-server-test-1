@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         properties.forEach((property, index) => {
             const cell = document.createElement('div');
             const value = waterLog[property];
-            
+
             cell.textContent = value;
 
             tableRow.appendChild(cell);
@@ -63,52 +63,54 @@ document.addEventListener('DOMContentLoaded', function () {
     // Kører renderTrackedWater for hver vand-log i trackedWater, for at vise de eksisterende logs
     trackedWater.forEach(renderTrackedWater);
 
-//Funktion der gemmer gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
-const brugerNavn = localStorage.getItem('Brugernavn');
-function saveTrackedWaterToDatabase(trackedWater) {
-    
-    const water = trackedWater;
-       
-    fetch('/track-water', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ brugerNavn, water }), // Stringify the entire object containing mealsData and id
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save Trackedwater to the database');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('TrackedWater saved to the database:', data);
-    })
-    .catch(error => {
-        console.error('Error saving TrackedWater to the database:', error);
-    });
-}
+    // Funktion der gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
+    // Henter brugernavn fra localStorage
+    const brugerNavn = localStorage.getItem('Brugernavn');
+    function saveTrackedWaterToDatabase(trackedWater) {
 
+        const water = trackedWater;
 
+        fetch('/track-water', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ brugerNavn, water }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save Trackedwater to the database');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('TrackedWater saved to the database:', data);
+            })
+            .catch(error => {
+                console.error('Error saving TrackedWater to the database:', error);
+            });
+    }
 
-    // Funktion til at logge vand og sætte det ind i HTML
+    // Funktion til at logge vandindtag
     window.logWater = function () {
+        // Henter værdierne fra inputfelterne
         const amount = parseFloat(document.getElementById('waterAmountInput').value) || 0;
         const dateAndTime = document.getElementById('waterDateInput').value;
 
         // Opretter en ny vand-log med dato/tid som id HII
-const waterLog = {
-id: new Date().getTime(),
-amount: amount,
-dateAndTime: dateAndTime
-};
-// Henter trackedWater fra localStorage, eller laver et tomt array hvis det ikke findes
-const trackedWater = JSON.parse(localStorage.getItem('trackedWater')) || [];
-trackedWater.push(waterLog);
-// Gemmer trackedWater i localStorage
-saveTrackedWaterToDatabase(JSON.stringify(trackedWater));
-localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
+        const waterLog = {
+            id: new Date().getTime(),
+            amount: amount,
+            dateAndTime: dateAndTime
+        };
+        // Henter trackedWater fra localStorage, eller laver et tomt array hvis det ikke findes
+        const trackedWater = JSON.parse(localStorage.getItem('trackedWater')) || [];
+        // Tilføjer den nye vand-log til trackedWater
+        trackedWater.push(waterLog);
+        // Gemmer trackedWater i databasen
+        saveTrackedWaterToDatabase(JSON.stringify(trackedWater));
+        // Opdaterer den lokale kopi af trackedWater i localStorage
+        localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
         // Opdaterer siden med den nye vand-log
         renderTrackedWater(waterLog);
     };
@@ -117,6 +119,7 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
     window.editWaterLog = function (logId) {
         // Henter eksisterende vand-log fra localStorage
         const trackedWater = JSON.parse(localStorage.getItem('trackedWater')) || [];
+        // Finder den log der skal redigeres
         const editedWaterLog = trackedWater.find(log => log.id === logId);
 
         // Hvis vand-loggen findes, bedes brugeren om at indtaste nye værdier
@@ -127,10 +130,11 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
             editedWaterLog.amount = newAmount;
             editedWaterLog.dateAndTime = newDateAndTime;
 
-            // Gemmer den opdaterede vand-log i localStorage
+            // Uploader den opdaterede vand-log til databasen
             saveTrackedWaterToDatabase(JSON.stringify(trackedWater));
+            // Opdaterer den lokale kopi af trackedWater i localStorage
             localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
-            
+
             // Opdaterer siden ved at tømme og gendindlæse vandloggene
             trackedWaterList.innerHTML = '';
             trackedWater.forEach(renderTrackedWater);
@@ -144,8 +148,9 @@ localStorage.setItem('trackedWater', JSON.stringify(trackedWater));
         // Filtrer ud den log der skal slettes
         const updatedTrackedWater = trackedWater.filter(log => log.id !== logId);
 
-        // Gemmer den opdaterede vand-log i localStorage
+        // Uploader den opdaterede vand-log til databasen
         saveTrackedWaterToDatabase(JSON.stringify(updatedTrackedWater));
+        // Opdaterer den lokale kopi af trackedWater i localStorage
         localStorage.setItem('trackedWater', JSON.stringify(updatedTrackedWater));
 
         // Opdaterer siden ved at tømme og gendindlæse vandloggene

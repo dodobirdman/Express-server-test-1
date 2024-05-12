@@ -14,34 +14,34 @@ app.use(express.json());
 // Bruge HTML filer fra 'static/html'
 app.use(express.static(path.join(__dirname, 'static')));
 
-//Sørger for du bliver redirected til login siden først!
+// Sørger for du bliver redirected til login siden først
 app.get('/', (req, res) => {
     res.redirect('http://localhost:3000/static/html/login.html');
 });
 
-// Handle requests for files within the 'static' directory
-app.get('/static/*', function(req, res) {
+// Håndterer requests for filer (websiderne) der ligger i /static/ folderen
+app.get('/static/*', function (req, res) {
     res.sendFile(path.join(__dirname, req.url));
 });
 
 
 
-// Endpoint to handle login requests
+// Endpoint der håndterer login-requests
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
         console.log('Received login request for username:', username);
 
-        // Connect to the database
+        // Bruger sql.connect til at forbinde til databasen
         await sql.connect(config);
         console.log('Connected to the database');
 
-        // Check if the username and password are correct
+        // Tjekker i databasen om brugeren eksisterer og hvis koden er korrekt
         const checkUserQuery = `SELECT * FROM Brugere WHERE Brugernavn = '${username}' AND Password = '${password}'`;
         const user = await sql.query(checkUserQuery);
         console.log('Query executed:', checkUserQuery);
-
+        // Svarer klienten om hvis login er succesfuldt eller ej
         if (user.recordset.length > 0) {
             console.log('Login successful');
             res.send('Login successful!');
@@ -50,11 +50,11 @@ app.post('/login', async (req, res) => {
             res.status(401).send('Invalid username or password');
         }
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
         console.log('Database connection closed');
     } catch (err) {
-        // Handle errors
+        // Fejlhåndtering
         console.error('Error during login:', err);
         res.status(500).send('Internal Server Error');
     }
@@ -65,7 +65,7 @@ app.post('/fetch-data', async (req, res) => {
     try {
         // Etabler forbindelse til databasen
         await sql.connect(config);
-        // Foretag forespørgsel til databasen
+        // Bruger await til at vente på svar fra databasen
 
         const result = await sql.query`
 
@@ -85,13 +85,13 @@ app.post('/fetch-data', async (req, res) => {
 
         `;
 
-     
-    
+
+
         // Tjek hvis brugeren ikke findes
         if (result.recordset.length === 0) {
             return res.status(404).send('User not found');
         }
-        
+
         // Send data til klienten
         res.json(result.recordset[0]);
 
@@ -104,32 +104,35 @@ app.post('/fetch-data', async (req, res) => {
 });
 
 
-// Endpoint to handle user creation
+// Endpoint der håndterer signup-requests
 app.post('/signup', async (req, res) => {
+    // laver variabel til at gemme data fra request body
     const { username, password, name, weight, height, age, sex } = req.body;
-
+    // try catch block til at håndtere fejl
     try {
+        // console log til bug fixing samt tracking af brugere
         console.log('Received signup request for username:', username);
 
-        // Connect to the database
+        // Etabler forbindelse
         await sql.connect(config);
         console.log('Connected to the database');
 
-        // Check if the username already exists
+        // Tjekker hvis brugeren allerede eksisterer
         const checkUserQuery = `SELECT * FROM Brugere WHERE Brugernavn = '${username}'`;
         const existingUser = await sql.query(checkUserQuery);
         console.log('Query executed:', checkUserQuery);
 
+        // Svarer med fejlbesked til klienten hvis brugeren findes allerede i databasen
         if (existingUser.recordset.length > 0) {
             console.log('Username already exists');
             return res.status(400).send('Username already exists');
         }
 
-        // Generate unique ID
-        const userId = Math.floor(Math.random() * 1000000); // Example of generating a random 6-digit number
-        console.log('Generated user ID:', userId);
+        // Laver et unik id til hver bruger
+        const userId = Math.floor(Math.random() * 1000000);
 
-        // Insert new user into the Brugere table with the unique ID
+
+        // Sætter brugeredataen ind i databasen
         const insertUserQuery = `
             INSERT INTO Brugere (id, Brugernavn, Password, name, Weight, Height, age, Sex)
             VALUES ('${userId}', '${username}', '${password}', '${name}', '${weight}', '${height}', '${age}', '${sex}')
@@ -147,16 +150,16 @@ app.post('/signup', async (req, res) => {
             VALUES ('${username}')
 
         `;
+        // await venter på svar fra databasen
         await sql.query(insertUserQuery);
-        console.log('User inserted into the Brugere table');
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
-        console.log('Database connection closed');
 
+        // Sender HTTP success response til klienten
         res.send('User created successfully!');
     } catch (err) {
-        // Handle errors
+        // Fejlhåndtering
         console.error('Error creating user:', err);
         res.status(500).send('Internal Server Error');
     }
@@ -173,28 +176,28 @@ app.listen(PORT, () => {
 
 
 
-// Configuration for your Azure SQL Database
+// Authentification-info til serverens SQL database ind i Azure
 const config = {
     user: 'martin',
     password: 'NutriTracker!23',
     server: 'eksamenserver.database.windows.net',
     database: 'nutrieksamen',
     options: {
-        encrypt: true, // Use encryption
-        trustServerCertificate: false // Change to true for local development
+        encrypt: true,
+        trustServerCertificate: false
     }
 };
 
 
-// Add this endpoint to your server-side JavaScript file
+// API til at gemme måltider i databasen
 app.post('/save-meals', async (req, res) => {
     const { meals, brugerNavn } = req.body;
-    
+
     try {
-        // Connect to the database
+        // Forbinder til databasen
         await sql.connect(config);
 
-        // Update meals in the database
+        // Laver variabel til at bruge som SQL query til databasen, med brugerens info
         const updateMealQuery = `
             UPDATE CreatedMeals
             SET createdMeals = '${meals}'
@@ -202,13 +205,13 @@ app.post('/save-meals', async (req, res) => {
         `;
 
         await sql.query(updateMealQuery, {
-            meals: meals, // Convert meals array to JSON string
+            meals: meals, // Konverterer måltiderne til JSON string
             brugerNavn: brugerNavn
         });
 
-        // Close the connection
+        // Lukker forbindelse
         await sql.close();
-
+        // Success response til klienten samt fejlhåndtering
         res.json({ success: true, message: 'Meals saved to the database' });
     } catch (error) {
         console.error('Error saving meals to the database:', error);
@@ -216,31 +219,29 @@ app.post('/save-meals', async (req, res) => {
     }
 });
 
+// API til at gemme trackedMeals i databasen
 app.post('/track-meals', async (req, res) => {
     const { meals, brugerNavn } = req.body;
-    
+
     try {
-        // Connect to the database
+        // Forbinder til databasen
         await sql.connect(config);
 
-        // Update meals in the database
+        // Opdaterer måltiderne i databasen med brugerens info
         const updateMealQuery = `
             UPDATE TrackedMeals
             SET trackedMeals = '${meals}'
             WHERE Brugernavn = '${brugerNavn}';
         `;
 
-        // Convert meals array to JSON string
-       // const mealsJson = JSON.stringify(meals);
-
         await sql.query(updateMealQuery, {
-            meals: meals, // Convert meals array to JSON string
+            meals: meals, 
             brugerNavn: brugerNavn
         });
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
-
+        // Success response til klienten samt fejlhåndtering
         res.json({ success: true, message: 'TrackedMeal saved to the database' });
     } catch (error) {
         console.error('Error saving Trackedmeal to the database:', error);
@@ -248,15 +249,15 @@ app.post('/track-meals', async (req, res) => {
     }
 });
 
-//kopi af TrackedMeals til vand
+// Gemmer vand info til databasen, med den samme metode some /track-meals
 app.post('/track-water', async (req, res) => {
     const { water, brugerNavn } = req.body;
-    
+
     try {
-        // Connect to the database
+        // Etabler forbindelse til databasen
         await sql.connect(config);
 
-        // Update meals in the database
+        // Opdaterer vandmængden i databasen med brugerens info
         const updateMealQuery = `
             UPDATE TrackedWater
             SET trackedWater = '${water}'
@@ -264,13 +265,13 @@ app.post('/track-water', async (req, res) => {
         `;
 
         await sql.query(updateMealQuery, {
-            water: water, // Convert meals array to JSON string
+            water: water, 
             brugerNavn: brugerNavn
         });
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
-
+        // success response til klienten samt fejlhåndtering
         res.json({ success: true, message: 'Trackedwater saved to the database' });
     } catch (error) {
         console.error('Error saving Trackedwater to the database:', error);
@@ -278,17 +279,18 @@ app.post('/track-water', async (req, res) => {
     }
 });
 
+// API til at gemme brugerens profildata i databasen
 app.post('/save-Data', async (req, res) => {
-    const { newData, brugerNavn, datatype} = req.body;
-    console.log('Received datatype:', datatype);
-    
+    // Serveren modtager data med dataen, den gældende bruger, og datatypen
+    const { newData, brugerNavn, datatype } = req.body;
+
     try {
-        // Connect to the database
+        // Etabælerer forbindelse
         await sql.connect(config);
+        // Laver en variabel til at bruge som SQL query til databasen, med brugerens info
         let updateDataQuery;
 
-       
-        // Check the datatype and construct the query accordingly
+        // Koden if og else-if til at tjekke hvilken type data er blevet sendt af klienten, og opdaterer databasen med den givne data
         if (datatype === 'Sex') {
             updateDataQuery = `
                 UPDATE Brugere
@@ -329,15 +331,16 @@ app.post('/save-Data', async (req, res) => {
             throw new Error('Invalid datatype');
         }
 
-        // Execute the constructed query
+        // Bruger den givne query til at opdatere databasen
         await sql.query(updateDataQuery, {
             newData: newData,
             brugerNavn: brugerNavn,
         });
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
 
+        // success response til klienten samt fejlhåndtering
         res.json({ success: true, message: 'Data saved to the database' });
     } catch (error) {
         console.error('Error saving data to the database:', error);
@@ -345,15 +348,15 @@ app.post('/save-Data', async (req, res) => {
     }
 });
 
-
+// Api til at slette en brugerprofil, der tager brugernavn som parameter
 app.post('/delete-profile', async (req, res) => {
     const { brugerNavn } = req.body;
-    
+    // Tager brugernavn som parameter
     try {
-        // Connect to the database
+        // Etablerer forbindelse til databasen
         await sql.connect(config);
 
-        // Delete meals in the database
+        // Laver en variabel til at bruge som SQL query til databasen, med brugernavnet og alle tabeller med data der skal slettes
         const deleteMealQuery = `
         DELETE FROM Brugere
         WHERE Brugernavn = '${brugerNavn}';
@@ -375,9 +378,10 @@ app.post('/delete-profile', async (req, res) => {
             brugerNavn: brugerNavn
         });
 
-        // Close the connection
+        // Lukker forbindelsen
         await sql.close();
 
+        // success response til klienten samt fejlhåndtering
         res.json({ success: true, message: 'Meals deleted from the database' });
     } catch (error) {
         console.error('Error deleting meals from the database:', error);
