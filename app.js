@@ -80,21 +80,32 @@ app.post('/fetch-data', async (req, res) => {
         // Etabler forbindelse til databasen
         await sql.connect(config);
         // Foretag forespørgsel til databasen
+
         const result = await sql.query`
-        SELECT * FROM Brugere WHERE Brugernavn = ${username}
 
-        SELECT * FROM Activities WHERE Brugernavn = ${username}
+    SELECT 
+    Brugere.*,
+    Activities.activity,
+    Activities.BMR,
+    CreatedMeals.createdMeals,
+    TrackedMeals.trackedMeals,
+    TrackedWater.trackedWater
+    FROM Brugere
+    LEFT JOIN Activities ON Brugere.Brugernavn = Activities.Brugernavn
+    LEFT JOIN CreatedMeals ON Brugere.Brugernavn = CreatedMeals.Brugernavn
+    LEFT JOIN TrackedMeals ON Brugere.Brugernavn = TrackedMeals.Brugernavn
+    LEFT JOIN TrackedWater ON Brugere.Brugernavn = TrackedWater.Brugernavn
+    WHERE Brugere.Brugernavn = ${username};
 
-        SELECT * FROM CreatedMeals WHERE Brugernavn = ${username}
-
-        SELECT * FROM TrackedMeals WHERE Brugernavn = ${username}
-        
-        SELECT * FROM TrackedWater WHERE Brugernavn = ${username}
         `;
+
+     
+    
         // Tjek hvis brugeren ikke findes
         if (result.recordset.length === 0) {
             return res.status(404).send('User not found');
         }
+        
         // Send data til klienten
         res.json(result.recordset[0]);
 
@@ -174,7 +185,6 @@ app.listen(PORT, () => {
 
 
 
-// Server-side code (Node.js environment)
 
 
 // Configuration for your Azure SQL Database

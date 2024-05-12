@@ -18,11 +18,11 @@ document.addEventListener("DOMContentLoaded", async function() {
         signoutLink.style.display = "block";
 
         // Fetch and display user data
-        var name = localStorage.getItem("name");
-        var height = localStorage.getItem("Height");
-        var weight = localStorage.getItem("Weight");
-        var age = localStorage.getItem("age");
-        var sex = localStorage.getItem("Sex");
+        let name = localStorage.getItem("name");
+        let height = localStorage.getItem("Height");
+        let weight = localStorage.getItem("Weight");
+        let age = localStorage.getItem("age");
+        let sex = localStorage.getItem("Sex");
 
         if (name && height && weight && age && sex) {
             userDataDiv.style.display = "block";
@@ -33,13 +33,13 @@ document.addEventListener("DOMContentLoaded", async function() {
             userSex.textContent = "Sex: " + sex;
 
             // Edit buttons functionality
-            var editHeightBtn = document.getElementById("editHeight");
-            var editWeightBtn = document.getElementById("editWeight");
-            var editAgeBtn = document.getElementById("editAge");
-            var editSexBtn = document.getElementById("editSex");
+            let editHeightBtn = document.getElementById("editHeight");
+            let editWeightBtn = document.getElementById("editWeight");
+            let editAgeBtn = document.getElementById("editAge");
+            let editSexBtn = document.getElementById("editSex");
 
             editHeightBtn.addEventListener("click", function() {
-                var newHeight = prompt("Enter new height (in cm):");
+                let newHeight = prompt("Enter new height (in cm):");
                 if (newHeight !== null && !isNaN(newHeight)) {
                     saveDataToDatabase(newHeight, 'Height');
                     localStorage.setItem("Height", newHeight);
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             });
 
             editWeightBtn.addEventListener("click", function() {
-                var newWeight = prompt("Enter new weight (in kg):");
+                let newWeight = prompt("Enter new weight (in kg):");
                 if (newWeight !== null && !isNaN(newWeight)) {
                     saveDataToDatabase(newWeight, 'Weight');
                     localStorage.setItem("Weight", newWeight);
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             });
 
             editAgeBtn.addEventListener("click", function() {
-                var newAge = prompt("Enter new age:");
+                let newAge = prompt("Enter new age:");
                 if (newAge !== null && !isNaN(newAge)) {
                     saveDataToDatabase(newAge, 'age');
                     localStorage.setItem("age", newAge);
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             });
 
             editSexBtn.addEventListener("click", function() {
-                var newSex = prompt("Enter new sex:");
+                let newSex = prompt("Enter new sex:");
                 const SEX = 'Sex';
                 if (newSex !== null) {
                     saveDataToDatabase(newSex, 'Sex');
@@ -89,20 +89,15 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 
     const brugerNavn = localStorage.getItem('Brugernavn');
-    // Add this function to your client-side JavaScript file
     function saveDataToDatabase(Data, Newdatatype) {
-        
-        
-
         const newData = Data;
         const datatype = Newdatatype;
-
         fetch('/save-Data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ brugerNavn, newData, datatype }), // Stringify the entire object containing mealsData and id
+            body: JSON.stringify({ brugerNavn, newData, datatype }), 
         })
         .then(response => {
             if (!response.ok) {
@@ -152,15 +147,14 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     });
 
-    // Add this function to your client-side JavaScript file
+    // Funktion til at kalde serveren og slette brugerens profil
     function deleteProfileToDatabase(brugerNavn) {
-        
         fetch('/delete-profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({brugerNavn}), // Stringify the entire object containing mealsData and id
+            body: JSON.stringify({brugerNavn}), 
         })
         .then(response => {
             if (!response.ok) {

@@ -19,14 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password, name, height, weight, age, sex })
             });
-
             if (response.ok) {
                 const message = await response.text();
-                alert(message); // Display success message
+                alert(message); // Succesbesked
                 window.location.href = '/static/html/login.html';
             } else {
                 const errorMessage = await response.text();
-                alert(errorMessage); // Display error message
+                alert(errorMessage); // Fejlbesked
             }
         } catch (error) {
             console.error('Error:', error);

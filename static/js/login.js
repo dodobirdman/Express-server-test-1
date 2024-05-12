@@ -8,16 +8,13 @@ function hideLoadingOverlay() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
-
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         showLoadingOverlay();
         const usernameInput = document.getElementById('username');
         const passwordInput = document.getElementById('password');
-
         const username = usernameInput.value;
         const password = passwordInput.value;
-
         try {
             const response = await fetch('/login', {
                 method: 'POST',
@@ -26,19 +23,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 body: JSON.stringify({ username, password })
             });
-
             if (response.ok) {
-
-                // Set cookie upon successful login
-                document.cookie = `username=${username}; path=/`; // Set cookie with username
-
-                // Call the function to fetch user data
+                // Sætter en cookie i browseren med brugernavnet
+                document.cookie = `username=${username}; path=/`;
+                // Kalder funktion til at hente brugerdata fra serveren
                 await fetchUserData(username);
-
                 // Fjern loading GIF'en
                 hideLoadingOverlay();
-
-                // Redirect to profile page
+                // Sender brugeren til profilsiden
                 window.location.href = '/static/html/profile.html';
             } else {
                 const errorMessage = await response.text();
@@ -68,7 +60,6 @@ async function fetchUserData(username) {
         }
 
         const responseData = await response.json();
-
         Object.entries(responseData).forEach(([key, value]) => {
             localStorage.setItem(key, value);
         });

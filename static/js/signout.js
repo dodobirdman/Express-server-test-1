@@ -1,19 +1,19 @@
-// Function to delete a cookie by name
+// Slette brugerens cookie
 function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
 
-// Function to redirect the user to login.html
+// videresender brugeren til login.html
 function redirectToLogin() {
     window.location.href = 'login.html';
 }
 
-// Function to clear localStorage
+// Sletter data fra localStorage
 function clearLocalStorage() {
     localStorage.clear();
 }
 
-// Delete the "username" cookie, clear localStorage, and redirect to login.html when the page loads
+// Sletter username cookie og localStorage data, og videresender brugeren til login siden
 window.onload = function() {
     deleteCookie('username');
     clearLocalStorage();

@@ -156,7 +156,7 @@ async function fetchUserData(username) {
         }
 
         const responseData = await response.json();
-
+        console.log(responseData);
         Object.entries(responseData).forEach(([key, value]) => {
             localStorage.setItem(key, value);
         });
