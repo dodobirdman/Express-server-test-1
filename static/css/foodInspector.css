@@ -89,7 +89,7 @@ body {
     height: 20px;
     padding: 8px;
     font-size: 12px;
-    border: 1px solid #91c789;
+    border: 2px solid #569BD5;
     border-radius:12px;
     background-color: #F2FFF5;
 }
@@ -97,13 +97,17 @@ body {
 #search {
     font-size:15px;
     color: #FFFFFF;
-    background-color: #91c789;
+    background-color: #569bd5;
     padding: 9px 12px;
     border-radius: 9px;
     display: inline-block;
     white-space: nowrap;
     cursor: pointer;
     border: none;
+}
+#search:hover {
+    background-color: #99D9DE;
+    color: #424242;
 }
 
 #searchSelected {
@@ -116,6 +120,17 @@ body {
     white-space: nowrap;
     cursor: pointer;
     border: none;
+}
+#searchSelected:hover {
+    background-color: #DEF6D8;
+    color: #424242;
+}
+
+#foodDropdown {
+    width: 180px;
+    font-size: 15px;
+    background-color: #F5F5F5;
+    border: 2px solid #569BD5;
 }
 
 #box1-3{

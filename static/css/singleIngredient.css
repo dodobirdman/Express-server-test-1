@@ -138,6 +138,19 @@ body {
 }
 
 
+#createMealBtn {
+    color: #FFFFFF;
+    background-color: #91c789;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 9px;
+    display: inline-block;
+    white-space: nowrap;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
 #createMealBtn:hover {
     background-color: #DEF6D8;
     color: #424242;
@@ -161,7 +174,7 @@ body {
   }
 
   #fillDropdownBtn {
-    color: #000000;
+    color: #FFFFFF;
     background-color: #569BD5;
     border: none;
     padding: 10px 20px;
@@ -169,9 +182,8 @@ body {
     display: inline-block;
     white-space: nowrap;
     cursor: pointer;
-    font-size:15px;
+    font-size: 15px;
     box-shadow: none;
-    
 }
 
 #fillDropdownBtn:hover {
@@ -179,21 +191,12 @@ body {
     color: #424242;
 }
 
-#createMealBtn {
-    color: #000000;
-    background-color: #569BD5;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 9px;
-    display: inline-block;
-    white-space: nowrap;
-    cursor: pointer;
-    font-size:15px;
-    box-shadow: none;
-    margin-bottom: 15px;
+#ingredientDropdown {
+    width: 180px;
+    margin-right: 10px;
+    font-size: 15px;
+    background-color: #F5F5F5;
+    border: 2px solid #569BD5;
 }
 
-#createMealBtn:hover {
-    background-color: #99D9DE;
-    color: #424242;
-}
+
