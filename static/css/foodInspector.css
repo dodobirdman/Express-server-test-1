@@ -7,7 +7,7 @@ body {
 
 .navbar {
     background-color: #DEF6D8;
-    border-bottom: 1px solid #ccc; 
+    border-bottom: 1px solid #BDBDBD; 
     padding: 10px; 
 }
 
@@ -29,11 +29,11 @@ body {
 
 .navbar a {
     text-decoration: none;
-    color: #000;
+    color: #000000;
 }
 
 .navbar a:hover {
-    color: #797878;
+    color: #757575;
 }
 
 #logo {

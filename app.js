@@ -6,7 +6,6 @@ const app = express();
 const sql = require('mssql');
 const PORT = 3000;
 
-module.exports = app;
 
 // Log requests
 app.use(logger('dev'));
