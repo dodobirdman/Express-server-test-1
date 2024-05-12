@@ -34,7 +34,7 @@ const render24HourView = () => {
 
     // Henter dataen fra localStorage
     const trackedMeals = JSON.parse(localStorage.getItem("trackedMeals")) || [];
-    const trackedActivity = JSON.parse(localStorage.getItem("trackedActivity")) || [];
+    const trackedActivity = JSON.parse(localStorage.getItem("activity")) || [];
     const trackedWater = JSON.parse(localStorage.getItem("trackedWater")) || [];
     const BMRInCalories = getBMRInCalories();
     const caloriesFromBMRPerHour = BMRInCalories / 24;
@@ -94,7 +94,7 @@ const render24HourView = () => {
     
         // Henter dataen fra localStorage
         const trackedMeals = JSON.parse(localStorage.getItem("trackedMeals")) || [];
-        const trackedActivity = JSON.parse(localStorage.getItem("trackedActivity")) || [];
+        const trackedActivity = JSON.parse(localStorage.getItem("activity")) || [];
         const trackedWater = JSON.parse(localStorage.getItem("trackedWater")) || [];
         const BMRInCalories = getBMRInCalories();
     
