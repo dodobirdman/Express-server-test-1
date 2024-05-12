@@ -161,8 +161,8 @@ input {
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
-    width: calc(100% - 20px); /* Adjusted width */
-    box-sizing: border-box; /* Added box-sizing */
+    width: calc(100% - 20px); 
+    box-sizing: border-box; 
 }
 
 select {
@@ -171,8 +171,8 @@ select {
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
-    width: calc(100% - 20px); /* Adjusted width */
-    box-sizing: border-box; /* Added box-sizing */
+    width: calc(100% - 20px); 
+    box-sizing: border-box; 
 
 }
 
@@ -183,7 +183,7 @@ button {
     font-size: 15px;
     font-weight: bolder;
     font-family: nunito;
-    padding: 10px 20px; /* Adjusted padding */
+    padding: 10px 20px; 
     margin: 10px;
     cursor: pointer;
 }

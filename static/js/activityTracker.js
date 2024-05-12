@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const trackedActivity = [];
-    // Function to calculate base metabolism rate based on age and weight
+    // Funktion der beregner basalstofskifte
     function calculateBMR(age, weight, sex) {
         let bmr;
         if (sex === "female" || sex === "Female") {
@@ -17,10 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 bmr = (0.0364 * weight) + 3.47;
             } else if (age >= 61 && age <= 75) {
                 bmr = (0.0386 * weight) + 2.88;
-            } else { // age > 75
+            } else { // alder > 75
                 bmr = (0.0410 * weight) + 2.61;
             }
-        } else { // Assuming male by default
+        } else { // Antager at brugeren er mand, hvis ikke kvindelig
             if (age <= 3) {
                 bmr = (0.249 * weight) - 0.13;
             } else if (age >= 4 && age <= 10) {
@@ -33,31 +33,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 bmr = (0.0485 * weight) + 3.67;
             } else if (age >= 61 && age <= 75) {
                 bmr = (0.0499 * weight) + 2.93;
-            } else { // age > 75
+            } else { // alder > 75
                 bmr = (0.035 * weight) + 3.43;
             }
         }
         return bmr;
     }
 
-    // Get user's age, weight, and sex from localStorage
+    // Hent brugerens alder, vægt og køn fra localStorage
     const age = parseInt(localStorage.getItem("age"));
     const weight = parseFloat(localStorage.getItem("Weight"));
     const sex = localStorage.getItem("Sex");
 
-    // Calculate base metabolism rate
+    // Beregn basalstofskifte
     const baseMetabolismRate = calculateBMR(age, weight, sex);
 
-    // Save BMR to localStorage
+    // Gem basalstofskifte i localStorage
     saveDataToDatabase(JSON.stringify(baseMetabolismRate.toFixed(2)), 'BMR')
     localStorage.setItem("BMR", baseMetabolismRate.toFixed(2));
 
-    // Display base metabolism rate on the webpage
+    // Vise basalstofskifte på siden
     const baseMetabolismElement = document.createElement("div");
     baseMetabolismElement.textContent = `Base metabolism rate: ${baseMetabolismRate.toFixed(2)} MJ/day`;
     document.getElementById("BMR").appendChild(baseMetabolismElement);
 
-    // Autofill date and time input fields
+    // Autoudfyld dato og tidspunkt
     const datetimeInput = document.getElementById("datetime");
     const now = new Date();
     const year = now.getFullYear();
@@ -68,30 +68,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentDatetime = `${year}-${month}-${day}T${hours}:${minutes}`;
     datetimeInput.value = currentDatetime;
 
-    // Event listener for addActivity button
+    // Eventlistener til knappen "Add activity"
     const addActivityButton = document.getElementById("addActivity");
     addActivityButton.addEventListener("click", function () {
-        // Get user inputs
+        // Hent data fra inputfelter
         const activitySelect = document.getElementById("activity");
         const selectedActivity = activitySelect.options[activitySelect.selectedIndex].text;
         const durationInput = document.getElementById("duration").value;
         const datetimeInput = document.getElementById("datetime").value;
 
-        // Check if duration is empty
+        // Tjekker hvis duration er tom
         if (durationInput === "") {
             alert("Please enter a duration.");
-            return; // Exit function if duration is empty
+            return;
         }
 
-        // Calculate calories burned
+        // Beregner kalorieforbrænding
         const caloriesPerHour = parseFloat(activitySelect.value);
         const ratio = parseFloat(durationInput) / 60;
         const caloriesBurned = caloriesPerHour * ratio;
 
-        // Generate random ID
+        // Opretter randomiseret id
         const id = Date.now().toString();
 
-        // Create activity object
+        // Skaber et objekt med aktivitetsdata
         const activity = {
             id: id,
             activity: selectedActivity,
@@ -102,30 +102,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-        // Check if localStorage item exists, if not, create it
-const trackedActivity = JSON.parse(localStorage.getItem("trackedActivity"))|| [];
+        // Tjekker om der er data i localStorage, og lav en tom array hvis ikke
+        const trackedActivity = JSON.parse(localStorage.getItem("activity")) || [];
 
 
-console.log(trackedActivity);
-
-        console.log(trackedActivity);
-        // Add new activity to trackedActivity
+        
+        // Tilføj aktivitet til trackedActivity
         trackedActivity.push(activity);
 
-        // Save to localStorage
+        // Gem til database
         saveDataToDatabase(JSON.stringify(trackedActivity), 'trackedActivity')
-        localStorage.setItem("trackedActivity", JSON.stringify(trackedActivity));
+        localStorage.setItem("activity", JSON.stringify(trackedActivity));
 
-        // Update UI
+        // Kalder funktion til at opdater UI'en
         updateActivityList();
     });
 
-    // Function to update activity list in UI
+    // Funktion til at opdatere UI'en
     function updateActivityList() {
         const activityList = document.getElementById("activityList");
         activityList.innerHTML = "";
 
-        let trackedActivity = localStorage.getItem("trackedActivity");
+        let trackedActivity = localStorage.getItem("activity");
         if (!trackedActivity) {
             trackedActivity = [];
         } else {
@@ -139,60 +137,55 @@ console.log(trackedActivity);
             trackedActivity.forEach(function (activity) {
                 const li = document.createElement("li");
                 li.textContent = `${activity.activity} - ${activity.calories.toFixed(2)} calories burned on ${activity.date}`;
-                li.classList.add("activityLi"); // Add class "activityLi"
+                li.classList.add("activityLi"); // tilføjer class til li, for at style det i css
 
-                // Create delete button
+                // Laver et slet knap for hver aktivitet
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "Delete";
                 deleteButton.classList.add("deleteButton");
 
-                // Add event listener to delete button
+                // Kører kode hvis slet knappen er trykket
                 deleteButton.addEventListener("click", function () {
-                    // Remove the corresponding activity from trackedActivity
+                    // Fjerner aktivitetet fra trackedActivity
                     trackedActivity = trackedActivity.filter(item => item.id !== activity.id);
 
-                    // Update localStorage
+                    // Opdaterer localStorage
                     saveDataToDatabase(JSON.stringify(trackedActivity), 'trackedActivity')
-                    localStorage.setItem("trackedActivity", JSON.stringify(trackedActivity));
+                    localStorage.setItem("activity", JSON.stringify(trackedActivity));
 
-                    // Update UI
+                    // Opdaterer UI
                     updateActivityList();
                 });
 
-                // Append delete button to list item
+                // Sætter slet knappen ind i li
                 li.appendChild(deleteButton);
 
-                // Append list item to activityList
+                // Sætter li ind i ul
                 activityList.appendChild(li);
             });
         }
     }
 
-    
-    // Initial update of activity list when page loads
+
+    // Opretter ul'en når siden først loader
     updateActivityList();
-
-    
-
-
-
 
 });
 
 const brugerNavn = localStorage.getItem('Brugernavn');
-    // Add this function to your client-side JavaScript file
-    function saveDataToDatabase(Data, Newdatatype) {
+// Funktion til at gemme data i databasen
+function saveDataToDatabase(Data, Newdatatype) {
 
-        const newData = Data;
-        const datatype = Newdatatype;
-
-        fetch('/save-Data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ brugerNavn, newData, datatype }),
-        })
+    const newData = Data;
+    const datatype = Newdatatype;
+    // API kald til serveren
+    fetch('/save-Data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brugerNavn, newData, datatype }),
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to save data to the database');
@@ -205,30 +198,30 @@ const brugerNavn = localStorage.getItem('Brugernavn');
         .catch(error => {
             console.error('Error saving data to the database:', error);
         });
-    }
-    async function fetchUserData(username) {
-        try {
-            const response = await fetch('/fetch-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username })
-            });
-    
-            if (!response.ok) {
-                throw new Error('Failed to fetch data from the server');
-            }
-    
-            const responseData = await response.json();
-    
-            Object.entries(responseData).forEach(([key, value]) => {
-                localStorage.setItem(key, value);
-            });
-    
-            console.log('Data fetched and saved to localStorage successfully.');
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+}
+// Funktion til at hente data fra databasen
+async function fetchUserData(username) {
+    try {
+        const response = await fetch('/fetch-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+        });
+        // Hvis der ikke er forbindelse til serveren, kastes en fejl
+        if (!response.ok) {
+            throw new Error('Failed to fetch data from the server');
         }
+        // Hvis der er forbindelse til serveren, gemmes data i localStorage
+        const responseData = await response.json();
+        Object.entries(responseData).forEach(([key, value]) => {
+            localStorage.setItem(key, value);
+        });
+
+        console.log('Data fetched and saved to localStorage successfully.');
+    } catch (error) {
+        console.error('Error fetching user data:', error);
     }
-    fetchUserData(brugerNavn);
+}
+fetchUserData(brugerNavn);

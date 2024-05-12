@@ -1,20 +1,7 @@
 // gem studienummer / apiKey så det er nemmere at kalde det i funktionerne
 const apiKey = '168902';
 
-// Hvis websiden er åbnet med en fødevarenavn i URL-linket, køre automatisk en søgning for den fødevare, 
-// Er lavet til at fungere med Meal Creator, hvis brugeren trykker på en fødevare, og det her tager linket og decoder den
-
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-// Kode til at vise/fjerne en loading GIF imens JS venter på svar fra API'en
+// Funktioner til at vise/fjerne en loading GIF imens JS venter på svar fra API'en
 function showLoadingOverlay() {
     document.getElementById('loading-foodinspector').style.display = 'flex';
 }
@@ -27,7 +14,8 @@ function foodLookup(foodItemId) {
     // Viser loading GIF'en
     showLoadingOverlay();
 
-    // Bruger foodID'en fra den første API til at kalde API'ens BySortKey endpoint med Promise
+    // Bruger den givne foodID fra dropdown listen
+    // Bruger promises til at lave alle API kaldene samtidig, og venter på at de alle er færdige
     return Promise.all([
         fetch(`https://nutrimonapi.azurewebsites.net/api/FoodCompSpecs/ByItem/${foodItemId}/BySortKey/1030`, {
             method: 'GET',
@@ -90,16 +78,19 @@ function foodLookup(foodItemId) {
 // Kører fillDropdown når brugeren trykker på search-knappen
 document.getElementById('search').addEventListener('click', fillDropdown);
 
-// Funktion til at fylde dropdown med fødevareemner baseret på søgeterm
+// Funktion til at fylde dropdown med fødevarer baseret på søgefeltet
 async function fillDropdown() {
+    // Viser loading-ikon for at stoppe interaktion med siden imens koden kører
     showLoadingOverlay();
-    const foodItem = document.getElementById('foodLookup').value.trim(); // Get the food item from the input field
+    // formatterer søgefeltet for at fjerne whitespace
+    const foodItem = document.getElementById('foodLookup').value.trim(); 
 
+    // Tjekker om der er skrevet noget i søgefeltet
     if (!foodItem) {
         alert("Please enter a food item.");
         return;
     }
-
+    // Bruger SearchString API'et til at finde fødevarer der matcher søgefeltet
     try {
         const response = await fetch(`https://nutrimonapi.azurewebsites.net/api/FoodItems/BySearch/${encodeURIComponent(foodItem)}`, {
             method: 'GET',
@@ -109,11 +100,12 @@ async function fillDropdown() {
         });
         const data = await response.json();
 
-        // Clear previous dropdown options
+        // Sletter tidligere indhold i dropdown
         const dropdown = document.getElementById('foodDropdown');
         dropdown.innerHTML = '';
 
-        // Populate dropdown with food items
+        // Tager array'et fra API'et og laver en option for hver fødevare
+        // Gemmer foodID som .value, så det kan bruges til at finde næringsværdierne
         data.forEach(item => {
             const option = document.createElement('option');
             option.text = item.foodName;
@@ -124,21 +116,19 @@ async function fillDropdown() {
         console.error("Error fetching food items:", error);
         alert("Error fetching food items. Please try again later.");
     }
+    // Fjerner loading-ikon
     hideLoadingOverlay();
 }
 
-// Add event listener to the secondary button to trigger search for selected food item
+// Event listener til at søge efter den valgte fødevare i dropdown-listen
 document.getElementById('searchSelected').addEventListener('click', function() {
+    // Tager .value fra den valgte tekst i dropdown-listen
     let selectedFoodId = document.getElementById('foodDropdown').value;
 
-    // Check if foodID is present in the URL
-    const foodIDFromURL = getParameterByName('foodID');
-    if (foodIDFromURL) {
-        selectedFoodId = foodIDFromURL; // If foodID is present in URL, use that instead
-    }
-
     if (selectedFoodId) {
+        // Kalder foodLookup funktionen med den valgte foodID
         foodLookup(selectedFoodId)
+            // Bruger Promise til at vente på at alle API kaldene er færdige
             .then(responses => Promise.all(responses.map(response => response.json())))
             .then(data => {
                 // Laver consts med objekterne fra hver API svar baseret på rækkefølgen de var kaldt i
@@ -212,28 +202,16 @@ document.getElementById('searchSelected').addEventListener('click', function() {
     }
 });
 
-// Tjekker hvis der er en foodName i URL'en, og kører automatisk foodLookup hvis det er sandt
-if (getParameterByName('foodName')) {
-    const foodIDFromURL = getParameterByName('foodID');
-    if (foodIDFromURL) {
-        foodLookup(foodIDFromURL);
-    }
-}
-
-// Add event listener to the input field to detect Enter key press
+// Kører koden hvis brugeren trykker på "Enter"-knappen i søgefeltet
 document.getElementById('foodLookup').addEventListener('keyup', function(event) {
-    // Check if the key pressed is Enter
     if (event.key === 'Enter') {
-        // Trigger click event on the search button
         document.getElementById('search').click();
     }
 });
 
-// Add event listener to the dropdown to detect Enter key press
+// Kører koden hvis brugeren trykker på "Enter"-knappen i dropdown-listen
 document.getElementById('foodDropdown').addEventListener('keyup', function(event) {
-    // Check if the key pressed is Enter
     if (event.key === 'Enter') {
-        // Trigger click event on the searchSelected button
         document.getElementById('searchSelected').click();
     }
 });

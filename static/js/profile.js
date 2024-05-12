@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function() {
+    // Henter elementer fra DOM
     let profileLink = document.getElementById("profileLink");
     let loginLink = document.getElementById("loginLink");
     let signupLink = document.getElementById("signupLink");
@@ -11,19 +12,21 @@ document.addEventListener("DOMContentLoaded", async function() {
     let userSex = document.getElementById("userSex");
     const deleteProfileButton = document.getElementById('deleteProfile');
 
+    // Tjekker hvis brugernavn findes i localstorage, hvilket betyder at brugeren er logget ind
     if (localStorage.getItem("Brugernavn") !== null) {
         profileLink.style.display = "block";
         loginLink.style.display = "none";
         signupLink.style.display = "none";
         signoutLink.style.display = "block";
 
-        // Fetch and display user data
+        // Henter brugerens data fra localstorage
         let name = localStorage.getItem("name");
         let height = localStorage.getItem("Height");
         let weight = localStorage.getItem("Weight");
         let age = localStorage.getItem("age");
         let sex = localStorage.getItem("Sex");
 
+        // Tjekker hvis alle data er tilgængelige
         if (name && height && weight && age && sex) {
             userDataDiv.style.display = "block";
             userName.textContent = name;
@@ -32,12 +35,14 @@ document.addEventListener("DOMContentLoaded", async function() {
             userAge.textContent = "Age: " + age + " years";
             userSex.textContent = "Sex: " + sex;
 
-            // Edit buttons functionality
+            // Etablerer variabler til at redigere brugerens data
             let editHeightBtn = document.getElementById("editHeight");
             let editWeightBtn = document.getElementById("editWeight");
             let editAgeBtn = document.getElementById("editAge");
             let editSexBtn = document.getElementById("editSex");
 
+            // Funktioner der bruger prompt til at få opdaterede data og saveDataToDatabase til at gemme data
+            // Knapperne kalder funktionen både med data og datatypen
             editHeightBtn.addEventListener("click", function() {
                 let newHeight = prompt("Enter new height (in cm):");
                 if (newHeight !== null && !isNaN(newHeight)) {
@@ -83,15 +88,14 @@ document.addEventListener("DOMContentLoaded", async function() {
         signoutLink.style.display = "none";
     }
 
-   
-
-
-
-
+// Funktion til at gemme data til databasen
+// Brugernavn er hentet fra localstorage
     const brugerNavn = localStorage.getItem('Brugernavn');
+    // Data og datatype er parametre til funktionen, og sendes til serveren der håndterer dataen baseret på datatypen
     function saveDataToDatabase(Data, Newdatatype) {
         const newData = Data;
         const datatype = Newdatatype;
+        // kalder/save-data API endpointet
         fetch('/save-Data', {
             method: 'POST',
             headers: {
@@ -112,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             console.error('Error saving data to the database:', error);
         });
     }
-
+    // fetchUserData opdaterer localstorage med data fra serveren
     async function fetchUserData(username) {
         try {
             const response = await fetch('/fetch-data', {
@@ -128,7 +132,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             }
     
             const responseData = await response.json();
-    
+            // Looper igennem alle keys og objekter, og gemmer dem i localstorage
             Object.entries(responseData).forEach(([key, value]) => {
                 localStorage.setItem(key, value);
             });
@@ -139,7 +143,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     }
     fetchUserData(brugerNavn);
-
+    // Event listener der kalder deleteProfile funktionen
     deleteProfileButton.addEventListener('click', function() {
         let confirmation = confirm("Are you sure you want to delete your profile?");
         if (confirmation) {
@@ -147,7 +151,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     });
 
-    // Funktion til at kalde serveren og slette brugerens profil
+    // Funktion til slette brugerens profil via /delete-profile endpointet
     function deleteProfileToDatabase(brugerNavn) {
         fetch('/delete-profile', {
             method: 'POST',
@@ -162,6 +166,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             }
             return response.json();
         })
+        // Brugeren bliver viderestillet til signout, hvis serveren svarer med success
+        // Dette sørger for at den lokal gemte data også bliver slettet
         .then(data => {
             console.log('saved to the database:', data);
             window.location.href = '/static/html/signout.html';

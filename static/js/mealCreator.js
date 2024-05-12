@@ -1,17 +1,18 @@
 function loadMealData() {
     const mealListContainer = document.getElementById("box1-2");
-    mealListContainer.innerHTML = ""; // Clear existing meals from the page
+    mealListContainer.innerHTML = ""; // Sletter eksisternde indhold fra HTML
 
-    // Loop through the createdMeals array in localStorage
+    // Loop igennem createdMeals i localstorage
     const createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
     createdMeals.forEach(mealData => {
-        // Check if the structure of the meal data is correct
+        // Tjekker hvis strukturen af dataen er korrekt
         if (mealData && Array.isArray(mealData.ingredients)) {
             let totalCalories = 0;
             let totalProtein = 0;
             let totalFat = 0;
             let totalFiber = 0;
 
+            // Skaber HTML elementer for hvert måltid
             const mealContainer = document.createElement("div");
             mealContainer.className = "meal-item";
 
@@ -20,6 +21,7 @@ function loadMealData() {
             mealNameElement.className = "meal-name";
             mealContainer.appendChild(mealNameElement);
 
+            // laver en liste af ingredienser
             const ingredientsList = document.createElement("ul");
             mealData.ingredients.forEach(ingredient => {
                 const ingredientItem = document.createElement("li");
@@ -27,7 +29,6 @@ function loadMealData() {
                 const foodNameSpan = document.createElement("span");
                 foodNameSpan.textContent = ingredient.foodName;
                 foodNameSpan.className = "food-name-link";
-                foodNameSpan.setAttribute("data-food-id", ingredient.foodID);
                 ingredientItem.appendChild(foodNameSpan);
 
                 if (ingredient.nutrition) {
@@ -50,12 +51,13 @@ function loadMealData() {
                 ingredientsList.appendChild(ingredientItem);
             });
 
+            // Laver et element for total nutrition
             mealContainer.appendChild(ingredientsList);
-
             const totalNutritionTitle = document.createElement("li");
             totalNutritionTitle.textContent = "Total Nutrition:";
             ingredientsList.appendChild(totalNutritionTitle);
 
+            // Sætter total nutrition ind som <li> elementer
             const totalNutritionValues = document.createElement("li");
             totalNutritionValues.textContent = 
             `Calories: ${totalCalories.toFixed(2)}, 
@@ -68,7 +70,8 @@ function loadMealData() {
             totalIngredientsElement.textContent = `Total Ingredients: ${mealData.ingredients.length}`;
             totalIngredientsElement.className = "total-ingredients";
             mealContainer.appendChild(totalIngredientsElement);
-
+            
+            // Laver en slet knap for hvert måltid
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
             deleteButton.className = "delete-button";
@@ -76,8 +79,8 @@ function loadMealData() {
                 deleteMeal(mealData.name);
                 loadMealData();
             };
+            // Sætter elementer ind i HTML
             mealContainer.appendChild(deleteButton);
-
             mealListContainer.appendChild(mealContainer);
         } else {
             console.error(`Invalid data for meal: ${mealData}`);
@@ -85,18 +88,18 @@ function loadMealData() {
     });
 }
 
+// Henter brugernaven fra localstorage
 const brugerNavn = localStorage.getItem('Brugernavn');
-// Add this function to your client-side JavaScript file
+// Kalder save-meals API'en med brugernavn og måltider
 function saveMealsToDatabase(mealsData) {
     
     const meals = mealsData;
-       
     fetch('/save-meals', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+        body: JSON.stringify({ brugerNavn, meals }), // Laver et JSON objekt med brugernavn og måltider
     })
     .then(response => {
         if (!response.ok) {
@@ -112,35 +115,20 @@ function saveMealsToDatabase(mealsData) {
     });
 }
 
-
-
-
-// Kører openFoodInspector hvis en food-name er clicket, ved at bruge foodID atrributtet
-document.getElementById("box1-2").addEventListener("click", function (event) {
-    const clickedElement = event.target;
-    if (clickedElement.classList.contains("food-name-link")) {
-        const foodID = clickedElement.getAttribute("data-food-id"); 
-        openFoodInspector(foodID);
-    }
-});
-// Funktion der tager foodID'en der blev trykket på og åbner en ny fane med Food Inspector
-function openFoodInspector(foodID) {
-    window.open(`/static/html/foodInspector.html?foodID=${encodeURIComponent(foodID)}`, '_blank');
-}
-
+// Funktion der sletter måltider fra databasen og opdater localStorage
 function deleteMeal(mealName) {
-    // Remove the meal from the createdMeals array in localStorage
     const createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
     const updatedMeals = createdMeals.filter(meal => meal.name !== mealName);
     saveMealsToDatabase(JSON.stringify(updatedMeals));
     localStorage.setItem('createdMeals', JSON.stringify(updatedMeals));
 }
 
+// Loader måltiderne når siden er loadet
 window.onload = function () {
     loadMealData();
 };
 
-
+// Funktion til at hente brugerdata fra databasen
 async function fetchUserData(username) {
     try {
         const response = await fetch('/fetch-data', {
@@ -166,4 +154,5 @@ async function fetchUserData(username) {
         console.error('Error fetching user data:', error);
     }
 }
+// Kalder fetchUserData med brugernavnet
 fetchUserData(brugerNavn);

@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', async function () {
     try {
 
-        // Retrieve meals from the createdMeals object
+        // Henter måldtider fra localStorage
         const createdMeals = JSON.parse(localStorage.getItem('createdMeals')) || [];
 
-        // Populate the dropdown menu with meals from createdMeals
+        // Sætter måltiderne ind i dropdown-menuen
         const mealDropdown = document.getElementById('mealDropdown');
         createdMeals.forEach(meal => {
             const option = document.createElement('option');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             mealDropdown.appendChild(option);
         });
 
-        // Autofill date and time input fields
+        // Autoudfylder datofeltet med nuværende dato og tid
         const dateInput = document.getElementById('dateInput');
         const now = new Date();
         const year = now.getFullYear();
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Sætter totalNutrition og grams til 0
             const totalNutrition = { calories: 0, protein: 0, fat: 0, fiber: 0 };
             let totalGrams = 0;
-            // Løber igennem alle ingredienserne og lægger deres næringsindhold sammen
+            // Løber igennem alle ingredienser og lægger deres næringsindhold sammen
             ingredients.forEach(ingredient => {
                 totalGrams += parseFloat(ingredient.quantity); // Sørger for at quantity er et tal
             });
@@ -107,18 +107,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
 
-        //Funktion der gemmer gemmer trackedMeals i databasen ud fra den bruger som er logget ind.
+        //Funktion der gemmer trackedMeals i databasen med brugernavn
         const brugerNavn = localStorage.getItem('Brugernavn');
         function saveTrackedMealsToDatabase(trackedMeals) {
 
             const meals = trackedMeals;
-
+            // Bruger /track-meals endpointet til at POST til serveren
             fetch('/track-meals', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ brugerNavn, meals }), // Stringify the entire object containing mealsData and id
+                body: JSON.stringify({ brugerNavn, meals }), 
             })
                 .then(response => {
                     if (!response.ok) {
@@ -133,11 +133,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     console.error('Error saving Trackedmeals to the database:', error);
                 });
         }
-
-
-
-
-
 
 
         // Funktion til at logge et måltid med dato og tidspunkt
@@ -176,6 +171,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Opdaterer eller laver trackedMeals i localStorage
                     const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
                     trackedMeals.push(trackedMeal);
+
+                    // Gemmer trackedMeals i databasen
                     saveTrackedMealsToDatabase(JSON.stringify(trackedMeals));
                     localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
 
@@ -197,22 +194,22 @@ document.addEventListener('DOMContentLoaded', async function () {
         
             const editedMealIndex = trackedMeals.findIndex(meal => meal.id === mealId);
             
-            // If-statement to check if the meal is found in trackedMeals
+            // If-statement der tjekker hvis måltidet er fundet i trackedMeals
             if (editedMealIndex !== -1) {
                 const editedMeal = trackedMeals[editedMealIndex];
                 const currentGramsEaten = editedMeal.gramsEaten;
         
-                // Prompt to edit the grams eaten for the meal
+                // Prompt til at få den nye mængde
                 const newGramsEaten = parseFloat(prompt(`Edit grams eaten for ${editedMeal.name}:`, currentGramsEaten)) || 0;
                 if (newGramsEaten === 0) {
                     alert('Invalid input. Grams eaten must be greater than 0.');
                     return;
                 }
         
-                // Calculate the ratio of old and new weights
+                // Laver en ratio for at opdatere næringsværdierne
                 const weightRatio = newGramsEaten / currentGramsEaten;
         
-                // Update the nutritional values based on the ratio
+                // Opdater næringsværdierne baseret på den nye mængde
                 const updatedTotalNutrition = {
                     calories: editedMeal.totalNutrition.calories * weightRatio,
                     protein: editedMeal.totalNutrition.protein * weightRatio,
@@ -220,24 +217,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                     fiber: editedMeal.totalNutrition.fiber * weightRatio,
                 };
         
-                // Prompt to edit the date & time for the meal
+                // Prompt til at ændre dato og tid
                 const newDateEaten = prompt(`Edit date & time for ${editedMeal.name}:`, editedMeal.dateEaten);
         
-                // Update the edited meal with new values
+                // Opdaterer måltidet med de nye værdier
                 editedMeal.gramsEaten = newGramsEaten;
                 editedMeal.dateEaten = newDateEaten || editedMeal.dateEaten;
                 editedMeal.totalNutrition = updatedTotalNutrition;
         
-                // Update trackedMeals array
+                // Opdaterer trackedMeals med det redigerede måltid
                 trackedMeals[editedMealIndex] = editedMeal;
         
-                // Update trackedMeals in localStorage
+                // Opdaterer den lokal kopi af trackedMeals for at vise det på siden
                 localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
         
-                // Call the function to save trackedMeals to the database
+                // Kalder function til at gemme måltidet i databasen
                 saveTrackedMealsToDatabase(JSON.stringify(trackedMeals));
         
-                // Clear and re-render the list of tracked meals
+                // Reloader trackedMeals listen med den redigerede måltid
                 trackedMealsList.innerHTML = '';
                 trackedMeals.forEach(renderTrackedMeal);
             } else {
@@ -248,13 +245,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Funktion til at slette et tracked måltid
         window.deleteMeal = function (mealId) {
+            // Henter trackedMeals fra localStorage
             const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
+            // Filtrerer ud den måltid der skal slettes
             const updatedTrackedMeals = trackedMeals.filter(meal => meal.id !== mealId);
-            //funktion der sørger for databasen også bliver opdateret
+
+            // Opdaterer databasen med den nye liste af tracked meals
             saveTrackedMealsToDatabase(JSON.stringify(updatedTrackedMeals));
+            // Opdaterer den lokal kopi af trackedMeals
             localStorage.setItem('trackedMeals', JSON.stringify(updatedTrackedMeals));
 
-            // Sletter den gamle liste og viser den nye liste med måltider
+            // Reloader trackedMeals listen efter måltidet er slettet
             trackedMealsList.innerHTML = '';
             updatedTrackedMeals.forEach(renderTrackedMeal);
         };
@@ -262,6 +263,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Error:', error);
     }
 
+    // Funktion til at opdater den lokale kopi af brugerdata
     async function fetchUserData(username) {
         try {
             const response = await fetch('/fetch-data', {
@@ -277,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
     
             const responseData = await response.json();
-    
+            // Looper igennem dataen og gemmer den i localStorage
             Object.entries(responseData).forEach(([key, value]) => {
                 localStorage.setItem(key, value);
             });
@@ -287,50 +289,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error fetching user data:', error);
         }
     }
+    // Tager brugernavn fra localStorage og henter brugerdata
     const brugerNavn = localStorage.getItem('Brugernavn');
     fetchUserData(brugerNavn);
-    
-
 
 });
 
-
-
-
-
-
-/*
-
-Gemmer en kopi af editMeal
-
-// Funktion til at redigere et tracked måltid
-        window.editMeal = function (mealId) {
-            const trackedMeals = JSON.parse(localStorage.getItem('trackedMeals')) || [];
-
-            const createdMeals = JSON.parse(localStorage.getItem('createdMeals'))
-            
-            const editedMeal = trackedMeals.find(meal => meal.id === mealId);
-            // If-statement til at redigere måltidet hvis den er fundet i localStorage
-            if (editedMeal) {
-                // Prompt til at redigere måltidet
-                const newGramsEaten = parseFloat(prompt(`Edit grams eaten for ${editedMeal.name}:`, editedMeal.gramsEaten)) || 0;
-                const newDateEaten = prompt(`Edit date & time for ${editedMeal.name}:`, editedMeal.dateEaten);
-
-                // Bruger calculateNutrition til at tage ingredienserne fra måltidet og gange dem med den nye mængde
-                const updatedNutrition = calculateNutrition(createdMeals.find(meal => meal.name === editedMeal.name).ingredients, newGramsEaten);
-
-                // Opdaterer den redigerede måltid
-                editedMeal.gramsEaten = newGramsEaten;
-                editedMeal.dateEaten = newDateEaten;
-                editedMeal.totalNutrition = updatedNutrition;
-                // Sætter den opdaterede måltid ind i trackedMeals
-                saveTrackedMealsToDatabase(JSON.stringify(trackedMeals));
-                localStorage.setItem('trackedMeals', JSON.stringify(trackedMeals));
-
-                // Sletter den gamle liste og viser den nye liste med måltider
-                trackedMealsList.innerHTML = '';
-                trackedMeals.forEach(renderTrackedMeal);
-            }
-        };
-
-        */

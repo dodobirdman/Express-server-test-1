@@ -6,24 +6,10 @@ const app = express();
 const sql = require('mssql');
 const PORT = 3000;
 
+
 // Log requests
 app.use(logger('dev'));
 app.use(express.json());
-
-/*
-// Handle requests for HTML files with or without query parameters
-app.get('/foodInspector.html', function(req, res) {
-    const foodID = req.query.foodID;
-    if (foodID) {
-        // Redirect to the same route without the query parameter
-        res.redirect('/static/html/foodInspector.html');
-    } else {
-        // Serve the HTML file without the query parameter
-        const filePath = path.join(__dirname, 'static/html/foodInspector.html');
-        res.sendFile(filePath);
-    }
-});
-*/
 
 // Bruge HTML filer fra 'static/html'
 app.use(express.static(path.join(__dirname, 'static')));
