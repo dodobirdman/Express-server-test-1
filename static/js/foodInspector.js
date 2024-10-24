@@ -215,3 +215,30 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
         document.getElementById('searchSelected').click();
     }
 });
+
+
+async function measureRTT() {
+    const startTime = Date.now(); // Starttidsstempel
+  
+    const response = await fetch('/api/ping', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ startTime }),
+    });
+  
+    const serverTime = (await response.json()).serverTime;
+    const endTime = Date.now(); // Sluttidsstempel
+  
+    const RTT = endTime - startTime;
+    console.log(`RTT: ${RTT} ms`);
+    console.log(`Server Processing Time: ${serverTime - startTime} ms`);
+    console.log(`Start time: ${startTime}`);
+    console.log(`Server time: ${serverTime}`);
+    console.log(`End time: ${endTime}`);
+
+
+  }
+  
+  measureRTT();
