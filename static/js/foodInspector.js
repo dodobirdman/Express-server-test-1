@@ -215,24 +215,39 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
     }
 });
 
+
 //Async funktion der beregner RTT mellem klient og server
-async function measureRTT() {
-    const startTime = performance.now(); // Start time
+// Async function that measures RTT between client and server and logs server response time
+async function measureResponseTime() {
+    try {
+        // Send a GET request using the fetch API
+        const response = await fetch('/', {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache',
+            },
+        });
+
+        // Check if the response is ok (status code in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Get the value of the X-Response-Time header
+        const responseTimeHeader = response.headers.get('X-Response-Time');
+        console.log(`X-Response-Time: ${responseTimeHeader}`); // Log the response time
+
+    } catch (error) {
+        console.error('Error fetching response time:', error);
+    }
+}
+
+// Call the function to measure response time immediately
+measureResponseTime();
+
+
   
-    const response = await fetch('/api/ping', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  
-    const endTime = performance.now(); // End time
-    const RTT = endTime - startTime; // Calculate RTT
-  
-    console.log(`RTT: ${RTT.toFixed(2)} ms`);
-  }
-  
-  measureRTT();
+
   
   
   

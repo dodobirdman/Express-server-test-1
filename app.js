@@ -12,15 +12,22 @@ app.use(logger('dev'));
 app.use(express.json());
 
 
-//Svarer på request fra klient
+const responseTime = require('response-time');
+
+
+// Middleware to measure response time
+app.use(responseTime((req, res, time) => {
+    res.locals.responseTime = time.toFixed(2); // Save the response time with fixed decimal precision
+    res.set('X-Response-Time', res.locals.responseTime); // Set the X-Response-Time header
+}));
+
+// Endpoint to respond to ping request with response time included
 app.get('/api/ping', (req, res) => {
-    
-    res.json({ message: 'Pong' });
-  });
-
-
-
-
+    res.json({
+        message: 'Pong',
+        responseTime: res.locals.responseTime // Include response time directly
+    });
+});
 
 
 // Bruge HTML filer fra 'static/html'
