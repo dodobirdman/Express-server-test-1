@@ -197,6 +197,11 @@ async function measureRTT() {
     const RTT = endTime - startTime;
     console.log(`RTT: ${RTT} ms`);
     console.log(`Server Processing Time: ${serverTime - startTime} ms`);
+    console.log(`Start time: ${startTime}`);
+    console.log(`Server time: ${serverTime}`);
+    console.log(`End time: ${endTime}`);
+
+
   }
   
   measureRTT();
