@@ -75,7 +75,7 @@ async function fetchUserData(username) {
 }
 
 async function measureRTT() {
-    const startTime = performance.now(); // Starttidsstempel
+    const startTime = Date.now(); // Starttidsstempel
   
     const response = await fetch('/api/ping', {
       method: 'POST',
@@ -85,8 +85,8 @@ async function measureRTT() {
       body: JSON.stringify({ startTime }),
     });
   
-    const endTime = performance.now(); // Sluttidsstempel
-    const { serverTime } = await response.json();
+    const serverTime = (await response.json()).serverTime;
+    const endTime = Date.now(); // Sluttidsstempel
   
     const RTT = endTime - startTime;
     console.log(`RTT: ${RTT} ms`);
@@ -94,4 +94,5 @@ async function measureRTT() {
   }
   
   measureRTT();
+  
   
