@@ -19,9 +19,10 @@ app.post('/api/ping', async (req, res) => {
     console.log(`Start time: ${startTime}, Server time: ${serverTime}`);
   
     res.json({ serverTime });
-  });
+});
 
-  
+
+
 // Bruge HTML filer fra 'static/html'
 app.use(express.static(path.join(__dirname, 'static')));
 

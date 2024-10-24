@@ -1,6 +1,6 @@
 // gem studienummer / apiKey så det er nemmere at kalde det i funktionerne
 const apiKey = '168902';
-
+measureRTT();
 // Funktioner til at vise/fjerne en loading GIF imens JS venter på svar fra API'en
 function showLoadingOverlay() {
     document.getElementById('loading-foodinspector').style.display = 'flex';
@@ -218,27 +218,27 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
 
 
 async function measureRTT() {
-    const startTime = Date.now(); // Starttidsstempel
+    const startTime = Date.now(); // Start timestamp
   
     const response = await fetch('/api/ping', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ startTime }),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startTime }),
     });
   
     const serverTime = (await response.json()).serverTime;
-    const endTime = Date.now(); // Sluttidsstempel
+    const endTime = Date.now(); // End timestamp
   
-    const RTT = endTime - startTime;
-    console.log(`RTT: ${RTT} ms`);
-    console.log(`Server Processing Time: ${serverTime - startTime} ms`);
-    console.log(`Start time: ${startTime}`);
-    console.log(`Server time: ${serverTime}`);
-    console.log(`End time: ${endTime}`);
+    const RTT = endTime - startTime; // Total round-trip time
+    const responseTime = serverTime - startTime; // Server processing time
 
-
-  }
+    // Log results
+    console.log(`RTT: ${RTT} ms`); // Total round-trip time
+    console.log(`Response Time: ${responseTime} ms`); // Server processing time
+}
   
-  measureRTT();
+
+  
+ 
