@@ -217,7 +217,7 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
 
 
 async function measureRTT() {
-    const startTime = performance.now(); // Starttidsstempel
+    const startTime = Date.now(); // Starttid
   
     const response = await fetch('/api/ping', {
       method: 'POST',
@@ -227,8 +227,8 @@ async function measureRTT() {
       body: JSON.stringify({ startTime }),
     });
   
-    const endTime = performance.now(); // Sluttidsstempel
-    const { serverTime } = await response.json();
+    const serverTime = (await response.json()).serverTime;
+    const endTime = Date.now(); // Sluttid når serverens svar modtages
   
     const RTT = endTime - startTime;
     console.log(`RTT: ${RTT} ms`);
@@ -236,6 +236,7 @@ async function measureRTT() {
   }
   
   measureRTT();
+  
   
   
 
