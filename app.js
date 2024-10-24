@@ -16,10 +16,14 @@ app.post('/api/ping', async (req, res) => {
     const { startTime } = req.body;
     const serverTime = Date.now();
   
-    console.log(`Start time: ${startTime}, Server time: ${serverTime}`);
+    // Log start time, server time, and their difference
+    console.log(`Start Time: ${startTime}`);
+    console.log(`Server Time: ${serverTime}`);
+    console.log(`Time Difference (Server - Client): ${serverTime - startTime} ms`);
   
     res.json({ serverTime });
 });
+
 
 
 
