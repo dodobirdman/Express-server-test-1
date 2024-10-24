@@ -14,14 +14,12 @@ app.use(express.json());
 
 const responseTime = require('response-time');
 
-
-
 app.use(responseTime((req, res, time) => {
-    res.locals.responseTime = time.toFixed(2); // Save the response time with fixed decimal precision
-    res.set('X-Response-Time', res.locals.responseTime); // Set the X-Response-Time header
+    res.locals.responseTime = time.toFixed(2); 
+    res.set('X-Response-Time', res.locals.responseTime); 
 }));
 
-// Endpoint to respond to ping request with response time included
+//sender ping fra serveren når den håndtere request
 app.get('/api/ping', (req, res) => {
     res.json({ message: 'Pong',});
 });

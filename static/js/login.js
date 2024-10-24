@@ -74,48 +74,43 @@ async function fetchUserData(username) {
     }
 }
 
+//Async funktion der bestemmer responstid
 async function measureResponseTime() {
     try {
-        // Send a GET request using the fetch API
+        //Send request for at teste responstid
         const response = await fetch('/', {
             method: 'GET',
             headers: {
                 'Cache-Control': 'no-cache',
             },
         });
-
-        // Check if the response is ok (status code in the range 200-299)
+        // Check om respons er ok (status code indenfor 200-299)
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        // Get the value of the X-Response-Time header
+        // Tag værdi af "X-Response-time" fra header af response
         const responseTimeHeader = response.headers.get('X-Response-Time');
-        console.log(`Response-Time: ${responseTimeHeader} ms`); // Log the response time
-
+        console.log(`Response-Time: ${responseTimeHeader} ms`); // Log respons tiden
     } catch (error) {
         console.error('Error fetching response time:', error);
     }
 }
 
+//Async funktion der beregner RTT mellem klient og server
 async function measureRTT() {
-    const startTime = performance.now(); // Start time
+    const startTime = performance.now(); // start tid ved kald fra klienten
   
     const response = await fetch('/api/ping', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    }); //venter på svar fra serveren
   
-    const endTime = performance.now(); // End time
-    const RTT = endTime - startTime; // Calculate RTT
-  
+    const endTime = performance.now(); //Slut tid ved modtaget svar
+    const RTT = endTime - startTime; // Beregn RTT
     console.log(`RTT: ${RTT.toFixed(2)} ms`);
   }
   
-  measureRTT();
-// Call the function to measure response time immediately
+measureRTT();
 measureResponseTime();
-  
-  
