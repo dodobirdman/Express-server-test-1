@@ -218,26 +218,25 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
 
 
 async function measureRTT() {
-    const startTime = Date.now(); // Start timestamp
+    const startTime = Date.now(); // Starttidsstempel
   
     const response = await fetch('/api/ping', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ startTime }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ startTime }),
     });
   
-    const serverTime = (await response.json()).serverTime;
-    const endTime = Date.now(); // End timestamp
+    const data = await response.json();
+    const serverTime = data.serverTime;
+    const endTime = Date.now(); // Sluttidsstempel
   
-    const RTT = endTime - startTime; // Total round-trip time
-    const responseTime = serverTime - startTime; // Server processing time
-
-    // Log results
-    console.log(`RTT: ${RTT} ms`); // Total round-trip time
-    console.log(`Response Time: ${responseTime} ms`); // Server processing time
+    const RTT = endTime - startTime; // RTT inkl. serverbehandling
+    console.log(`RTT: ${RTT} ms`);
+    console.log(`Server Processing Time: ${data.processingTime} ms`);
 }
+
   
 
   
