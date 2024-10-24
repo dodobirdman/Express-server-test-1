@@ -15,7 +15,7 @@ app.use(express.json());
 const responseTime = require('response-time');
 
 
-// Middleware to measure response time
+
 app.use(responseTime((req, res, time) => {
     res.locals.responseTime = time.toFixed(2); // Save the response time with fixed decimal precision
     res.set('X-Response-Time', res.locals.responseTime); // Set the X-Response-Time header
@@ -23,10 +23,7 @@ app.use(responseTime((req, res, time) => {
 
 // Endpoint to respond to ping request with response time included
 app.get('/api/ping', (req, res) => {
-    res.json({
-        message: 'Pong',
-        responseTime: res.locals.responseTime // Include response time directly
-    });
+    res.json({ message: 'Pong',});
 });
 
 

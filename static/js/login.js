@@ -74,6 +74,30 @@ async function fetchUserData(username) {
     }
 }
 
+async function measureResponseTime() {
+    try {
+        // Send a GET request using the fetch API
+        const response = await fetch('/', {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache',
+            },
+        });
+
+        // Check if the response is ok (status code in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Get the value of the X-Response-Time header
+        const responseTimeHeader = response.headers.get('X-Response-Time');
+        console.log(`Response-Time: ${responseTimeHeader} ms`); // Log the response time
+
+    } catch (error) {
+        console.error('Error fetching response time:', error);
+    }
+}
+
 async function measureRTT() {
     const startTime = performance.now(); // Start time
   
@@ -91,7 +115,7 @@ async function measureRTT() {
   }
   
   measureRTT();
-  
-  
+// Call the function to measure response time immediately
+measureResponseTime();
   
   
