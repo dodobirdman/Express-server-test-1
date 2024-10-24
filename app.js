@@ -12,13 +12,17 @@ app.use(logger('dev'));
 app.use(express.json());
 
 
-app.post('/api/ping', async (req, res) => {
-    const { startTime } = req.body;
-    const serverTime = Date.now();
+app.post('/api/ping', (req, res) => {
+    const serverStartTime = process.hrtime.bigint(); 
   
-    console.log(`Start time: ${startTime}, Server time: ${serverTime}`);
+
+    const serverEndTime = process.hrtime.bigint(); 
+    const serverProcessingTime = Number(serverEndTime - serverStartTime) / 1e6; 
   
-    res.json({ serverTime });
+    res.json({
+      serverTime: Number(serverStartTime) / 1e6, 
+      serverProcessingTime,
+    });
   });
 
 
