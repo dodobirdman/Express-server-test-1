@@ -14,22 +14,12 @@ app.use(express.json());
 
 app.post('/api/ping', async (req, res) => {
     const { startTime } = req.body;
-    const serverTimeStart = Date.now(); // Tid før behandling
-
-    // Serverens behandling kan inkludere databaseanmodninger eller andre operationer her.
-    
-    const serverTimeEnd = Date.now(); // Tid efter behandling
-
-    const serverTime = Date.now(); // Serverens aktuelle tid
-    const processingTime = serverTimeEnd - serverTimeStart; // Behandlingstid
-
-    console.log(`Start Time: ${startTime}`);
-    console.log(`Server Time: ${serverTime}`);
-    console.log(`Processing Time: ${processingTime} ms`);
-    console.log(`Time Difference (Server - Client): ${serverTime - startTime} ms`);
-
-    res.json({ serverTime, processingTime });
-});
+    const serverTime = Date.now();
+  
+    console.log(`Start time: ${startTime}, Server time: ${serverTime}`);
+  
+    res.json({ serverTime });
+  });
 
 
 

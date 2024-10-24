@@ -1,6 +1,5 @@
 // gem studienummer / apiKey så det er nemmere at kalde det i funktionerne
 const apiKey = '168902';
-measureRTT();
 // Funktioner til at vise/fjerne en loading GIF imens JS venter på svar fra API'en
 function showLoadingOverlay() {
     document.getElementById('loading-foodinspector').style.display = 'flex';
@@ -218,7 +217,7 @@ document.getElementById('foodDropdown').addEventListener('keyup', function(event
 
 
 async function measureRTT() {
-    const startTime = Date.now(); // Starttidsstempel
+    const startTime = performance.now(); // Starttidsstempel
   
     const response = await fetch('/api/ping', {
       method: 'POST',
@@ -228,15 +227,16 @@ async function measureRTT() {
       body: JSON.stringify({ startTime }),
     });
   
-    const data = await response.json();
-    const serverTime = data.serverTime;
-    const endTime = Date.now(); // Sluttidsstempel
+    const endTime = performance.now(); // Sluttidsstempel
+    const { serverTime } = await response.json();
   
-    const RTT = endTime - startTime; // RTT inkl. serverbehandling
+    const RTT = endTime - startTime;
     console.log(`RTT: ${RTT} ms`);
-    console.log(`Server Processing Time: ${data.processingTime} ms`);
-}
-
+    console.log(`Server Processing Time: ${serverTime - startTime} ms`);
+  }
+  
+  measureRTT();
+  
   
 
   
