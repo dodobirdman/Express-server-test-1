@@ -181,25 +181,21 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 async function measureRTT() {
-    const startTime = performance.now(); // Start time in high precision
+    const startTime = performance.now(); // Start time
   
     const response = await fetch('/api/ping', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ startTime }),
     });
   
-    const { serverTime, serverProcessingTime } = await response.json();
-    const endTime = performance.now(); // End time in high precision
-  
+    const endTime = performance.now(); // End time
     const RTT = endTime - startTime; // Calculate RTT
   
     console.log(`RTT: ${RTT.toFixed(2)} ms`);
-    console.log(`Server Processing Time: ${serverProcessingTime.toFixed(2)} ms`);
-
   }
   
   measureRTT();
+  
   

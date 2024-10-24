@@ -12,17 +12,10 @@ app.use(logger('dev'));
 app.use(express.json());
 
 
-app.post('/api/ping', (req, res) => {
-    const serverStartTime = process.hrtime.bigint(); 
-  
-
-    const serverEndTime = process.hrtime.bigint(); 
-    const serverProcessingTime = Number(serverEndTime - serverStartTime) / 1e6; 
-  
-    res.json({
-      serverTime: Number(serverStartTime) / 1e6, 
-      serverProcessingTime,
-    });
+//Svarer på request fra klient
+app.get('/api/ping', (req, res) => {
+    
+    res.json({ message: 'Pong' });
   });
 
 
