@@ -73,3 +73,25 @@ async function fetchUserData(username) {
         console.error('Error fetching user data:', error);
     }
 }
+
+async function measureRTT() {
+    const startTime = performance.now(); // Starttidsstempel
+  
+    const response = await fetch('/api/ping', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ startTime }),
+    });
+  
+    const endTime = performance.now(); // Sluttidsstempel
+    const { serverTime } = await response.json();
+  
+    const RTT = endTime - startTime;
+    console.log(`RTT: ${RTT} ms`);
+    console.log(`Server Processing Time: ${serverTime - startTime} ms`);
+  }
+  
+  measureRTT();
+  
